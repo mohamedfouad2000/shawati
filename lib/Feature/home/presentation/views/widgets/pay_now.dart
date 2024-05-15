@@ -41,7 +41,10 @@ class PayNowSheet extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const ClockInOutWithTime(),
+              const ClockInOutWithTime(
+                clockin: "10:00 AM",
+                clockout: "11:00 AM",
+              ),
               const SizedBox(
                 height: 20,
               ),

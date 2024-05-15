@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/styles.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
 
 class ApartMentTitle extends StatelessWidget {
-  const ApartMentTitle({super.key});
+  const ApartMentTitle(
+      {super.key, required this.catName, required this.catNameAr});
+  final String catName;
+  final String catNameAr;
 
   @override
   Widget build(BuildContext context) {
@@ -11,22 +14,22 @@ class ApartMentTitle extends StatelessWidget {
       children: [
         Expanded(
             child: Text(
-          "Apartments",
+          LocalizationCubit.get(context).isArabic() ? catNameAr : catName,
           style: StylesData.font18,
         )),
         InkWell(
           onTap: () {},
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                "Showing ",
-                style: StylesData.font12.copyWith(color: Colors.black),
-              ),
-              Text(
-                "263 home",
-                style: StylesData.font12.copyWith(color: ConstColor.kMainColor),
-              ),
+              // Text(
+              //   "Showing ",
+              //   style: StylesData.font12.copyWith(color: Colors.black),
+              // ),
+              // Text(
+              //   "263 home",
+              //   style: StylesData.font12.copyWith(color: ConstColor.kMainColor),
+              // ),
             ],
           ),
         )

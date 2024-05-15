@@ -3,6 +3,7 @@ import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/login/presentation/views/login_view.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class LoginInHere extends StatelessWidget {
   const LoginInHere({
@@ -15,7 +16,7 @@ class LoginInHere extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Already have an account? ",
+          S.of(context).Alreadyhaveanaccount,
           style: StylesData.font14,
         ),
         InkWell(
@@ -23,7 +24,7 @@ class LoginInHere extends StatelessWidget {
             NavegatorPush(context, const LoginView());
           },
           child: Text(
-            "sign In here",
+            S.of(context).signInhere,
             style: StylesData.font14.copyWith(
                 color: ConstColor.kMainColor, fontWeight: FontWeight.w700),
           ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/styles.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_state.dart';
 
 class FloorFIltter extends StatefulWidget {
   const FloorFIltter({
@@ -12,36 +15,43 @@ class FloorFIltter extends StatefulWidget {
 }
 
 class _FloorFIltterState extends State<FloorFIltter> {
-  int currentIndex = 0;
+  // int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Floor",
-          style: StylesData.font16,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: 50,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (BuildContext context, int index) {
-              return typeItem(index: index);
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(
-                width: 10,
-              );
-            },
-            itemCount: 3,
-          ),
-        ),
-      ],
+    return BlocConsumer<SearchCubit, SearchState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Floor",
+              style: StylesData.font16,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 50,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return typeItem(index: index);
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(
+                    width: 10,
+                  );
+                },
+                itemCount: 3,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -51,14 +61,16 @@ class _FloorFIltterState extends State<FloorFIltter> {
         setState(() {
           print(index);
 
-          currentIndex = index;
-          print(currentIndex);
+          SearchCubit.get(context).floor = index;
+          print(SearchCubit.get(context).floor);
         });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
-            color: currentIndex == index ? ConstColor.kMainColor : Colors.white,
+            color: SearchCubit.get(context).floor == index
+                ? ConstColor.kMainColor
+                : Colors.white,
             borderRadius: BorderRadius.circular(25),
             border: Border.all(color: Colors.grey.shade300)),
         child: Center(
@@ -66,7 +78,9 @@ class _FloorFIltterState extends State<FloorFIltter> {
             '${index + 1}',
             style: StylesData.font17.copyWith(
                 fontSize: 15,
-                color: currentIndex == index ? Colors.white : Colors.black),
+                color: SearchCubit.get(context).floor == index
+                    ? Colors.white
+                    : Colors.black),
           ),
         ),
       ),

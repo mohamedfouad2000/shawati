@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:shawati/Core/utils/assets_data.dart';
+import 'package:shawati/Core/constans/const.dart';
+import 'package:shawati/Core/local/cache_Helper.dart';
 import 'package:shawati/Core/utils/components.dart';
+import 'package:shawati/Feature/home/presentation/views/home_view.dart';
 import 'package:shawati/Feature/login/presentation/views/login_view.dart';
 import 'package:shawati/Feature/splash/presentation/views/widgets/splach_image_logo.dart';
 import 'package:shawati/Feature/splash/presentation/views/widgets/tqnia_logo.dart';
@@ -16,7 +16,6 @@ class SplachViewBody extends StatefulWidget {
 
 class _SplachViewBodyState extends State<SplachViewBody> {
   bool isloading = false;
-  @override
   Future fadeInAnimation() async {
     await Future.delayed(const Duration(seconds: 1));
 
@@ -25,7 +24,14 @@ class _SplachViewBodyState extends State<SplachViewBody> {
     });
 
     await Future.delayed(const Duration(seconds: 2));
-    Nav(context, const LoginView());
+    String x = CacheHelper.getData(key: 'Token') ?? '';
+    print(x);
+    if (x != '') {
+      TOKEN = x;
+      Nav(context, const HomeView(currentidex: 0));
+    } else {
+      Nav(context, const LoginView());
+    }
   }
 
   @override

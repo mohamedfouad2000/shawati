@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shawati/Core/utils/assets_data.dart';
-import 'package:shawati/Core/utils/colors.dart';
-import 'package:shawati/Core/utils/styles.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shawati/Core/widgets/custom_loading_widget.dart';
+import 'package:shawati/Core/widgets/empty_wid.dart';
+import 'package:shawati/Core/widgets/faliure_wid.dart';
+import 'package:shawati/Core/widgets/loading/home_lead_loading.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/Home%20Cubit/home_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/Home%20Cubit/home_state.dart';
+import 'package:shawati/Feature/home/presentation/views/widgets/allproduct_widget.dart';
+import 'package:shawati/Feature/home/presentation/views/widgets/product_data.dart';
 
 class ProductItem extends StatelessWidget {
   const ProductItem({
@@ -11,107 +17,52 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            alignment: Alignment.bottomRight,
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state is HomeSucc) {
+          if (state.model.data!.services!.isEmpty) {
+            return const Center(
+              child: EmptyWidget(),
+            );
+          }
+          return Column(
             children: [
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: const DecorationImage(
-                        image: AssetImage(AssetsData.testimage2),
-                        fit: BoxFit.cover)),
-              ),
-              Positioned(
-                right: 18,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    const CircleAvatar(
-                      radius: 23,
-                      backgroundColor: Colors.white,
-                    ),
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: ConstColor.kMainColor,
-                      child: const Center(
-                        child: Image(
-                            image: AssetImage(
-                              AssetsData.save,
-                            ),
-                            width: 15,
-                            height: 15),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
+              AllProducts(services: state.model.data!.services!),
               const SizedBox(
-                width: 10,
+                height: 10,
               ),
-              Text(
-                "Fransico Apartment",
-                style: StylesData.font24Google,
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return ProductData(
+                      title: state.model.data?.services?[index].name ?? '',
+                      subTitle: state.model.data?.services?[index].place ?? '',
+                      image: state.model.data?.services?[index].image ?? '',
+                      subTitlearab:
+                          state.model.data?.services?[index].place ?? '',
+                      titlearab:
+                          state.model.data?.services?[index].nameAr ?? '',
+                      money:
+                          state.model.data?.services?[index].priceWithCommission.toString() ??
+                              '');
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(
+                    height: 10,
+                  );
+                },
+                itemCount: state.model.data?.services?.length ?? 0,
               ),
             ],
-          ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              const Icon(
-                Icons.location_on_outlined,
-                color: Colors.grey,
-                size: 15,
-              ),
-              const SizedBox(
-                width: 4,
-              ),
-              Text(
-                "Jeddah, Saudi Arabia",
-                style: StylesData.font12.copyWith(color: Colors.black),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 10,
-              ),
-              const SizedBox(
-                width: 4,
-              ),
-              Text(
-                "SAR 150 ",
-                style: StylesData.font18.copyWith(color: ConstColor.kMainColor),
-              ),
-              Text(
-                "/Day",
-                style: StylesData.font16
-                    .copyWith(color: Colors.black, fontWeight: FontWeight.w400),
-              )
-            ],
-          )
-        ],
-      ),
+          );
+        } else if (state is HomeError) {
+          return const Center(child: FailureWidget());
+        } else {
+          return const CustomLoadingWidget(child: HomeLeadLoading());
+        }
+      },
     );
   }
 }

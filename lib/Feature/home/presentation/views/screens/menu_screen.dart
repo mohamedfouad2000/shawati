@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/list_title_menu.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/peson_widget.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -18,7 +19,7 @@ class MenuScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Menu',
+              S.of(context).Menu,
               style: StylesData.font24Google,
             ),
             const SizedBox(

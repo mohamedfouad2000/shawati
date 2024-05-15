@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/styles.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class NotificationTitle extends StatelessWidget {
   const NotificationTitle({super.key});
@@ -11,22 +12,22 @@ class NotificationTitle extends StatelessWidget {
       children: [
         Expanded(
             child: Text(
-          "Notifications",
+          S.of(context).Notifications,
           style: StylesData.font18,
         )),
         InkWell(
           onTap: () {},
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                "Delete all ",
-                style: StylesData.font12.copyWith(color: Colors.red),
-              ),
-              const ImageIcon(
-                AssetImage(AssetsData.delete),
-                color: Colors.red,
-              )
+              // Text(
+              //   "Delete all ",
+              //   style: StylesData.font12.copyWith(color: Colors.red),
+              // ),
+              // ImageIcon(
+              //   AssetImage(AssetsData.delete),
+              //   color: Colors.red,
+              // )
             ],
           ),
         )

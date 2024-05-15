@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shawati/Core/constans/const.dart';
+import 'package:shawati/Core/local/cache_Helper.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Core/utils/styles.dart';
@@ -10,6 +12,7 @@ import 'package:shawati/Feature/home/presentation/views/screens/support_screen.d
 import 'package:shawati/Feature/home/presentation/views/screens/terms_screen.dart';
 import 'package:shawati/Feature/lang/presentation/views/lang_page_view.dart';
 import 'package:shawati/Feature/login/presentation/views/login_view.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class ListTitleMenu extends StatefulWidget {
   const ListTitleMenu({super.key});
@@ -19,14 +22,14 @@ class ListTitleMenu extends StatefulWidget {
 }
 
 class _ListTitleMenuState extends State<ListTitleMenu> {
-  List<String> titles = [
-    'My booking',
-    'Language',
-    'Notifications',
-    'favorites',
-    'support',
-    'terms & conditions',
-    'logout',
+  List<String> titlesArabic = [
+    'الحجزات الخاصه بك ',
+    'اللـغه',
+    'الاشعـارات',
+    'قائمه المفضله',
+    'الدعـم',
+    'الشروط والأحكام',
+    'تسجيل الخروج',
   ];
   List<String> images = [
     AssetsData.mybooking,
@@ -52,6 +55,15 @@ class _ListTitleMenuState extends State<ListTitleMenu> {
   ];
   @override
   Widget build(BuildContext context) {
+    List<String> titles = [
+      S.of(context).MyBooking,
+      S.of(context).Language,
+      S.of(context).Notifications,
+      S.of(context).favorites,
+      S.of(context).support,
+      S.of(context).termsconditions,
+      S.of(context).logout,
+    ];
     return ListView.separated(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -59,9 +71,11 @@ class _ListTitleMenuState extends State<ListTitleMenu> {
         return menuItem(
             title: titles[index],
             image: images[index],
+            titles: titles,
             context: context,
             widget: widgets[index],
-            index: index);
+            index: index,
+            titleArabic: titlesArabic[index]);
       },
       separatorBuilder: (BuildContext context, int index) {
         return const SizedBox(
@@ -74,8 +88,10 @@ class _ListTitleMenuState extends State<ListTitleMenu> {
 
   Widget menuItem(
           {required String title,
+          required String titleArabic,
           required String image,
           required context,
+          required List<String> titles,
           required Widget widget,
           required int index}) =>
       Container(
@@ -107,7 +123,7 @@ class _ListTitleMenuState extends State<ListTitleMenu> {
             ),
             Expanded(
               child: Text(
-                title,
+                titles[index],
                 style: StylesData.font12.copyWith(
                   color: index == 6 ? const Color(0xffFC2323) : Colors.black,
                 ),
@@ -118,6 +134,11 @@ class _ListTitleMenuState extends State<ListTitleMenu> {
             IconButton(
                 onPressed: () {
                   if (index == 0 || index == 6) {
+                    if (index == 6) {
+                      CacheHelper.removeData(key: 'Token');
+                      TOKEN = '';
+                    }
+
                     Nav(context, widget);
                   } else {
                     NavegatorPush(context, widget);

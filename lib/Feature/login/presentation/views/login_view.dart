@@ -6,8 +6,13 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: LoginViewBody(),
+    TextEditingController phoneController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    return Scaffold(
+      body: LoginViewBody(
+        phoneController: phoneController,
+        passwordController: passwordController,
+      ),
     );
   }
 }

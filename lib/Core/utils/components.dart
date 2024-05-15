@@ -1,9 +1,21 @@
 // import 'package:country_picker/country_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/styles.dart';
+import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/Add%20Rating/add_rating_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/notification_screen.dart';
+import 'package:location/location.dart';
+import 'package:shawati/generated/l10n.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 
 Widget defaultButton({
   required VoidCallback fun,
@@ -71,6 +83,8 @@ Widget customTextFiled(
             Radius.circular(rad),
           ),
         ),
+        fillColor: Colors.white,
+        filled: true,
         border: OutlineInputBorder(
           borderSide: const BorderSide(width: 1, color: Color(0xFFEAEAEA)),
           borderRadius: BorderRadius.all(
@@ -110,6 +124,8 @@ Widget customTextFormedFiled({
       obscureText: obscureText,
       keyboardType: type,
       validator: (value) {
+        print("object is $value");
+
         if (value != null && value.isEmpty) {
           return '';
         } else {
@@ -274,7 +290,9 @@ AppBar customAppBarWithNotification(context) {
           NavegatorPush(context, const NotificationScreen());
         },
         child: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
+          padding: LocalizationCubit.get(context).isArabic()
+              ? const EdgeInsets.only(left: 14.0)
+              : const EdgeInsets.only(right: 14.0),
           child: Container(
             height: 50,
             width: 50,
@@ -349,7 +367,7 @@ AppBar customAppBarInNotification(context) {
                   width: 6,
                 ),
                 Text(
-                  "Mask all read",
+                  S.of(context).MakeAllRead,
                   style: StylesData.font12,
                 )
               ],
@@ -357,6 +375,15 @@ AppBar customAppBarInNotification(context) {
       ),
     ],
   );
+}
+
+openDialPad(String phoneNumber) async {
+  Uri url = Uri(scheme: "tel", path: phoneNumber);
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    print("Can't open dial pad.");
+  }
 }
 
 AppBar customAppBarWithCallender(context) {
@@ -421,5 +448,147 @@ AppBar customAppBarWithCallender(context) {
         ),
       ),
     ],
+  );
+}
+
+showToast({required String msq, Color color = Colors.black}) =>
+    Fluttertoast.showToast(
+        msg: msq,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: color,
+        textColor: Colors.white,
+        fontSize: 18.0);
+
+Widget CachedImage(String url, {double? height, double? width}) => ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: CachedNetworkImage(
+        imageUrl: url,
+        height: height,
+        fit: BoxFit.cover,
+        width: width,
+        placeholder: (context, url) => LoadingAnimationWidget.newtonCradle(
+          size: 50,
+          color: Colors.grey,
+        ),
+        errorWidget: (context, url, er) => Container(
+          height: 20,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
+          child: const Icon(Icons.error),
+        ),
+      ),
+    );
+
+Future<LocationData> getloction() async {
+  Location location = Location();
+  bool? servesenable;
+  PermissionStatus? permison;
+  LocationData? locationdata;
+  servesenable = await location.serviceEnabled();
+  if (!servesenable) {
+    servesenable = await location.requestService();
+    if (!servesenable) {
+      // return;
+    }
+  }
+  permison = await location.hasPermission();
+  if (permison == PermissionStatus.denied) {
+    permison = await location.requestPermission();
+    if (permison != PermissionStatus.granted) {
+      // return;
+    }
+  }
+
+  locationdata = await location.getLocation();
+  return locationdata;
+  // lat = locationdata.latitude;
+  // long = locationdata.longitude;
+}
+
+textNumber({required String number}) async {
+  // Android
+  var uri = 'sms:$number?body=hello%20there';
+  if (await canLaunch(uri)) {
+    await launch(uri);
+  } else {
+    // iOS
+    uri = 'sms:$number?body=hello%20there';
+    if (await canLaunch(uri)) {
+      await launch(uri);
+    } else {
+      throw 'Could not launch $uri';
+    }
+  }
+}
+
+void showRatingDialog({required BuildContext context, required int id}) {
+  final dialog = BlocProvider(
+    create: (context) => AddRatingCubit(HomeRepoImpl()),
+    child: BlocConsumer<AddRatingCubit, AddRatingState>(
+      listener: (context, state) {
+        if (state is AddRatingSucc) {
+          showToast(msq: state.msq);
+          Navigator.pop(context);
+        }
+      },
+      builder: (context, state) {
+        return RatingDialog(
+          initialRating: 1.0,
+          starSize: 35,
+
+          // your app's name?
+          title: Text(
+            S.of(context).RatingDialog,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // encourage your user to leave a high rating?
+          message: Text(
+            S.of(context).rateText,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 15),
+          ),
+          // your app's logo?
+          image: Image(
+            image: state is AddRatingLoading
+                ? const AssetImage('assets/images/loading.png')
+                : const AssetImage('assets/images/rating.png'),
+            height: 80,
+          ),
+          submitButtonText: S.of(context).submit,
+          commentHint: S.of(context).ratehint,
+          onCancelled: () => print('cancelled'),
+          force: true,
+
+          onSubmitted: (response) {
+            print(
+                'rating: ${response.rating}, comment: ${response.comment.toString().trim()}');
+
+            BlocProvider.of<AddRatingCubit>(context).addRating(
+                comment: response.comment.toString().trim() == ''
+                    ? 'Review'
+                    : response.comment,
+                rating: response.rating,
+                id: id);
+          },
+        );
+      },
+    ),
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    barrierDismissible: true, // set to false if you want to force a rating
+    builder: (context) {
+      return dialog;
+    },
   );
 }

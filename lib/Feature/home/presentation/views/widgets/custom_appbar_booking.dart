@@ -3,6 +3,7 @@ import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/notification_screen.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class CustomBookingAppBar extends StatelessWidget {
   const CustomBookingAppBar({
@@ -15,7 +16,7 @@ class CustomBookingAppBar extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            "My booking",
+            S.of(context).MyBooking,
             style: StylesData.font24Google,
           ),
         ),

@@ -36,6 +36,8 @@ class AssetsData {
   static const image3 = 'assets/images/3.png';
   static const chat = 'assets/images/chat.png';
   static const line = 'assets/images/Line 38.png';
+  static const lineback = 'assets/images/Line.png';
+
   static const clock = 'assets/images/clock.png';
   static const paypal = 'assets/images/paypal.png';
   static const visa = 'assets/images/visa.png';

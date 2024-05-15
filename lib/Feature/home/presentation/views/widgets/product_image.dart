@@ -1,11 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
+import 'package:shawati/Core/constans/const.dart';
 
 import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/colors.dart';
+import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Core/utils/styles.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class ProductImage extends StatelessWidget {
-  const ProductImage({super.key});
+  const ProductImage(
+      {super.key,
+      required this.name,
+      required this.place,
+      required this.rate,
+      required this.bed,
+      required this.bath,
+      required this.floor,
+      required this.price,
+      required this.image,
+      required this.nameAr});
+  final String name;
+  final String nameAr;
+
+  final String image;
+
+  final String place;
+  final int rate;
+  final int bed;
+  final int bath;
+  final int floor;
+  final int price;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +42,9 @@ class ProductImage extends StatelessWidget {
           height: 200,
           width: double.infinity,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: const DecorationImage(
-                  image: AssetImage(AssetsData.testimage2), fit: BoxFit.cover)),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: InstaImageViewer(child: CachedImage('$xURLIMAGE$image')),
         ),
         const SizedBox(
           height: 10,
@@ -27,7 +53,7 @@ class ProductImage extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                "The family villa",
+                LocalizationCubit.get(context).isArabic() ? nameAr : name,
                 style: StylesData.font24Google,
               ),
             ),
@@ -40,7 +66,7 @@ class ProductImage extends StatelessWidget {
                 children: [
                   const Icon(Icons.star, color: Color(0xffFFA800)),
                   Text(
-                    '4.89',
+                    rate.toString(),
                     style: StylesData.font17
                         .copyWith(fontSize: 12, color: Colors.black),
                   ),
@@ -59,7 +85,7 @@ class ProductImage extends StatelessWidget {
               width: 4,
             ),
             Text(
-              "Jeddah, Saudi Arabia",
+              place,
               style: StylesData.font12.copyWith(color: Colors.black),
             )
           ],
@@ -84,7 +110,7 @@ class ProductImage extends StatelessWidget {
                 size: 14,
               ),
               Text(
-                " 5",
+                " $bed",
                 style: StylesData.font14,
               ),
               const SizedBox(
@@ -98,7 +124,7 @@ class ProductImage extends StatelessWidget {
                 size: 14,
               ),
               Text(
-                " 3",
+                " $bath",
                 style: StylesData.font14,
               ),
               const SizedBox(
@@ -112,7 +138,7 @@ class ProductImage extends StatelessWidget {
                 size: 14,
               ),
               Text(
-                " 2",
+                " $floor",
                 style: StylesData.font14,
               ),
             ],
@@ -124,12 +150,12 @@ class ProductImage extends StatelessWidget {
         Row(
           children: [
             Text(
-              "SAR 150 ",
+              "${S.of(context).SAR} $price ",
               style: StylesData.font18.copyWith(color: ConstColor.kMainColor),
             ),
             Expanded(
               child: Text(
-                "/Day",
+                "/${S.of(context).day}",
                 style: StylesData.font16
                     .copyWith(color: Colors.black, fontWeight: FontWeight.w400),
               ),
@@ -143,7 +169,7 @@ class ProductImage extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'For You',
+                    S.of(context).ForYou,
                     style: StylesData.font8
                         .copyWith(fontSize: 8, color: ConstColor.kMainColor),
                   ),

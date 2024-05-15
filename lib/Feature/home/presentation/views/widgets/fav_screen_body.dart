@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shawati/Core/utils/styles.dart';
-import 'package:shawati/Feature/home/presentation/views/widgets/product_list.dart';
+import 'package:shawati/Feature/home/presentation/views/widgets/fav_screen_list.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class FavoritesScreenBody extends StatelessWidget {
   const FavoritesScreenBody({super.key});
@@ -13,13 +14,13 @@ class FavoritesScreenBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "favorites",
+            S.of(context).favorites,
             style: StylesData.font24Google,
           ),
           const SizedBox(
             height: 10,
           ),
-          const productList(),
+          const FavScreenList(),
         ],
       ),
     );

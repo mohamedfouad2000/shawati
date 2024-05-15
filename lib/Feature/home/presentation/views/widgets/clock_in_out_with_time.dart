@@ -3,11 +3,61 @@ import 'package:flutter/material.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/styles.dart';
+import 'package:shawati/generated/l10n.dart';
 
-class ClockInOutWithTime extends StatelessWidget {
+class ClockInOutWithTime extends StatefulWidget {
   const ClockInOutWithTime({
     super.key,
+    required this.clockin,
+    required this.clockout,
   });
+  final String clockin;
+  final String clockout;
+
+  @override
+  State<ClockInOutWithTime> createState() => _ClockInOutWithTimeState();
+}
+
+class _ClockInOutWithTimeState extends State<ClockInOutWithTime> {
+  String start = '';
+  String end = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    try {
+      start = widget.clockin
+          .split(',')
+          .first
+          .replaceAll('[', '')
+          .replaceAll('"', '')
+          .replaceAll(']', '')
+          .replaceAll('\\', '')
+          .trim();
+      end = widget.clockin
+          .split(',')
+          .last
+          .replaceAll('[', '')
+          .replaceAll('"', '')
+          .replaceAll(']', '')
+          .replaceAll('\\', '')
+          .trim();
+    } catch (e) {
+      start = widget.clockin
+          .replaceAll('[', '')
+          .replaceAll('"', '')
+          .replaceAll(']', '')
+          .replaceAll('\\', '')
+          .trim();
+      end = widget.clockin
+          .replaceAll('[', '')
+          .replaceAll('"', '')
+          .replaceAll(']', '')
+          .replaceAll('\\', '')
+          .trim();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +77,7 @@ class ClockInOutWithTime extends StatelessWidget {
                     size: 15,
                   ),
                   Text(
-                    " check in",
+                    S.of(context).ClockIn,
                     style: StylesData.font9.copyWith(
                         color: const Color(0xffABABAB),
                         fontWeight: FontWeight.w400),
@@ -38,7 +88,11 @@ class ClockInOutWithTime extends StatelessWidget {
                 height: 4,
               ),
               Text(
-                "1 Aug 24, 11:00 am",
+                widget.clockin.isNotEmpty && widget.clockin != ''
+                    ? (start
+                        // .substring(0, 17)
+                        )
+                    : '',
                 style: StylesData.font11.copyWith(color: Colors.black),
               )
             ],
@@ -58,7 +112,7 @@ class ClockInOutWithTime extends StatelessWidget {
                   size: 15,
                 ),
                 Text(
-                  " check out",
+                  S.of(context).ClockOut,
                   style: StylesData.font9.copyWith(
                       color: const Color(0xffABABAB),
                       fontWeight: FontWeight.w400),
@@ -69,7 +123,7 @@ class ClockInOutWithTime extends StatelessWidget {
               height: 4,
             ),
             Text(
-              "1 Aug 24, 11:00 am",
+              widget.clockout.isNotEmpty && widget.clockout != '' ? end : '',
               style: StylesData.font11.copyWith(color: Colors.black),
             )
           ],
