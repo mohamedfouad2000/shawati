@@ -93,7 +93,32 @@
    "AddRating":"تعيين التقييم ",
    "RatingDialog":"التقييم ",
    "rateText":"اضغط على نجمة لتعيين تقييمك. أضف المزيد من الوصف هنا إذا كنت تريد.",
-   "ratehint":"قم بتعيين التعليق الخاص بك"
+   "ratehint":"قم بتعيين التعليق الخاص بك",
+   "Daily":"يومي",
+   "weekly":"اسبوعي",
+   "Monthly":"شهري",
+   "Yearly":"سنوي",
+   "setlocation":"تحديد الموقع",
+   "changelocation":"تغيير الموقع",
+   "Payment":"الدفـع",
+   "Choose_The_Payment_Method":"اختيار وسيلة الدفع",
+   "Upload_your_payment_screen_here":"رفع صورة الدفع هنا",
+   "Please_select_payment_method_and_upload_payment_screen":"يرجى تحديد طريقة الدفع ورفع صورة الدفع",
+   "Drop_your_files_here_or": "رفع ملفاتك هنا",
+   "imageSize": "يجب ان يكون الصورة اقل من 5 ميجا",
+   "browse": "تصفح",
+   "phone_eroor":"من فضلك ادخل الرقم صحيح",
+   "SkipForNow":"تخطي الان اذا كنت تريد",
+   "AllowAccess":"السماح بالوصول",
+   "EnableLocation":"تفعيل الموقع",
+   "chooseLocation":"اختر موقعك لبدء البحث عن طلبك",
+   "aroundyou":"قريب منك",
+   "SetLocationManually":"تحديد الموقع يدويا",
+   "Loading":"جاري التحميل ..."
+
+
+
+
 
 
 

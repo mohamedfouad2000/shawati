@@ -29,6 +29,7 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
     print(
         'Aha bath${SearchCubit.get(context).bath} bed${SearchCubit.get(context).bed}floor ${SearchCubit.get(context).floor} maxarea${SearchCubit.get(context).maxarea} minarea${SearchCubit.get(context).minarea} maxprice${SearchCubit.get(context).maxPrice} minprice${SearchCubit.get(context).minPrice} priceDuration${titles[SearchCubit.get(context).priceDuration ?? 0]}  text${SearchCubit.get(context).text}');
     SearchCubit.get(context).searchData(
+        context: context,
         lat: SearchCubit.get(context).lat ?? -1,
         long: SearchCubit.get(context).long ?? -1,
         text: SearchCubit.get(context).text ?? '',

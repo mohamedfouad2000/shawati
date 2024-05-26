@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shawati/Core/constans/const.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
@@ -12,6 +13,7 @@ import 'package:shawati/Feature/home/presentation/views/manager/Add%20Or%20Remov
 import 'package:shawati/Feature/home/presentation/views/manager/Home%20Cubit/home_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Home%20Cubit/home_state.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/screens/product_details_screen.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/product_details_screen_home.dart';
 import 'package:shawati/generated/l10n.dart';
 
@@ -67,7 +69,7 @@ Widget item(context,
       onTap: () {
         NavegatorPush(
             context,
-            ProductDetailsScreenHome(
+            ProductDetailsScreen(
               model: model!,
               owner: owner,
             ));
@@ -96,7 +98,7 @@ Widget item(context,
                       child: CachedImage('$xURLIMAGE${model?.image}'),
                     ),
                     if (BlocProvider.of<AddOrRemoveFavCubit>(context)
-                            .favoritesListHome[model?.id] ==
+                            .favouritesList[model?.id] ==
                         true)
                       Positioned(
                         right: 8,
@@ -135,11 +137,14 @@ Widget item(context,
                 const SizedBox(
                   width: 10,
                 ),
-                Text(
-                  LocalizationCubit.get(context).isArabic()
-                      ? '${model?.nameAr}'
-                      : '${model?.name}',
-                  style: StylesData.font13.copyWith(color: Colors.black),
+                Expanded(
+                  child: Text(
+                    LocalizationCubit.get(context).isArabic()
+                        ? '${model?.nameAr}'
+                        : '${model?.name}',
+                    maxLines: 2,
+                    style: StylesData.font13.copyWith(color: Colors.black),
+                  ),
                 ),
               ],
             ),
@@ -175,7 +180,7 @@ Widget item(context,
                   width: 4,
                 ),
                 Text(
-                  "${S.of(context).SAR} ${model?.priceWithCommission} ",
+                  "${S.of(context).SAR} ${model?.price} ",
                   style: StylesData.font8.copyWith(
                     color: ConstColor.kMainColor,
                   ),

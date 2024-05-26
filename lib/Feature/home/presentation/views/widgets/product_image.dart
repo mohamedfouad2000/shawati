@@ -7,7 +7,9 @@ import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/screens/view_image_screen.dart';
 import 'package:shawati/generated/l10n.dart';
+import 'package:widget_zoom/widget_zoom.dart';
 
 class ProductImage extends StatelessWidget {
   const ProductImage(
@@ -39,13 +41,20 @@ class ProductImage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: 200,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: InstaImageViewer(child: CachedImage('$xURLIMAGE$image')),
-        ),
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: InkWell(
+                onTap: () {
+                  NavegatorPush(
+                      context,
+                      ProductImageScreen(imageList: [
+                        '$xURLIMAGE$image',
+                      ]));
+                },
+                child: CachedImage('$xURLIMAGE$image'))),
         const SizedBox(
           height: 10,
         ),

@@ -6,6 +6,8 @@ import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Getcategory%20Cubit/get_category_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Getcategory%20Cubit/get_category_state.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class TypeFIltter extends StatefulWidget {
   const TypeFIltter({
@@ -33,7 +35,7 @@ class _TypeFIltterState extends State<TypeFIltter> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Type",
+                  S.of(context).Type,
                   style: StylesData.font16,
                 ),
                 const SizedBox(
@@ -46,6 +48,7 @@ class _TypeFIltterState extends State<TypeFIltter> {
                     itemBuilder: (BuildContext context, int index) {
                       return typeItem(
                           name: state.list[index].brandName ?? '',
+                          nameAr: state.list[index].brandNameAr ?? '',
                           index: state.list[index].id ?? 0);
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -70,7 +73,8 @@ class _TypeFIltterState extends State<TypeFIltter> {
     );
   }
 
-  Widget typeItem({required String name, required int index}) {
+  Widget typeItem(
+      {required String name, required int index, required String nameAr}) {
     return InkWell(
       onTap: () {
         setState(() {
@@ -90,7 +94,7 @@ class _TypeFIltterState extends State<TypeFIltter> {
             border: Border.all(color: Colors.grey.shade300)),
         child: Center(
           child: Text(
-            name,
+            LocalizationCubit.get(context).isArabic() ? nameAr : name,
             style: StylesData.font17.copyWith(
                 fontSize: 15,
                 color: SearchCubit.get(context).categoryId == index

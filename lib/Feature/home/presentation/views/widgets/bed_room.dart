@@ -4,6 +4,7 @@ import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_state.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class BedRoomFIltter extends StatefulWidget {
   const BedRoomFIltter({
@@ -28,7 +29,7 @@ class _BedRoomFIltterState extends State<BedRoomFIltter> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Bed rooms",
+              S.of(context).bedRooms,
               style: StylesData.font16,
             ),
             const SizedBox(

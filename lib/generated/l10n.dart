@@ -981,6 +981,216 @@ class S {
       args: [],
     );
   }
+
+  /// `Daily`
+  String get Daily {
+    return Intl.message(
+      'Daily',
+      name: 'Daily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `weekly`
+  String get weekly {
+    return Intl.message(
+      'weekly',
+      name: 'weekly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly`
+  String get Monthly {
+    return Intl.message(
+      'Monthly',
+      name: 'Monthly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yearly`
+  String get Yearly {
+    return Intl.message(
+      'Yearly',
+      name: 'Yearly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `set location`
+  String get setlocation {
+    return Intl.message(
+      'set location',
+      name: 'setlocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change location`
+  String get changelocation {
+    return Intl.message(
+      'Change location',
+      name: 'changelocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment`
+  String get Payment {
+    return Intl.message(
+      'Payment',
+      name: 'Payment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose The Payment Method`
+  String get Choose_The_Payment_Method {
+    return Intl.message(
+      'Choose The Payment Method',
+      name: 'Choose_The_Payment_Method',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload your payment screen here`
+  String get Upload_your_payment_screen_here {
+    return Intl.message(
+      'Upload your payment screen here',
+      name: 'Upload_your_payment_screen_here',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select payment method and upload payment screen`
+  String get Please_select_payment_method_and_upload_payment_screen {
+    return Intl.message(
+      'Please select payment method and upload payment screen',
+      name: 'Please_select_payment_method_and_upload_payment_screen',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Drop your files here, or`
+  String get Drop_your_files_here_or {
+    return Intl.message(
+      'Drop your files here, or',
+      name: 'Drop_your_files_here_or',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `JPG, PNG, PDF (Max 800x400px - 2Mo)`
+  String get imageSize {
+    return Intl.message(
+      'JPG, PNG, PDF (Max 800x400px - 2Mo)',
+      name: 'imageSize',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `browse`
+  String get browse {
+    return Intl.message(
+      'browse',
+      name: 'browse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the correct number`
+  String get phone_eroor {
+    return Intl.message(
+      'Please enter the correct number',
+      name: 'phone_eroor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip for now`
+  String get SkipForNow {
+    return Intl.message(
+      'Skip for now',
+      name: 'SkipForNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow Access`
+  String get AllowAccess {
+    return Intl.message(
+      'Allow Access',
+      name: 'AllowAccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable Location`
+  String get EnableLocation {
+    return Intl.message(
+      'Enable Location',
+      name: 'EnableLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `choose your location to start find the request`
+  String get chooseLocation {
+    return Intl.message(
+      'choose your location to start find the request',
+      name: 'chooseLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `around you.`
+  String get aroundyou {
+    return Intl.message(
+      'around you.',
+      name: 'aroundyou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set Location Manually`
+  String get SetLocationManually {
+    return Intl.message(
+      'Set Location Manually',
+      name: 'SetLocationManually',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading ...`
+  String get Loading {
+    return Intl.message(
+      'Loading ...',
+      name: 'Loading',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

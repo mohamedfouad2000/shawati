@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:shawati/Core/utils/colors.dart';
@@ -7,23 +8,59 @@ import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/data/model/home_model/contact_details.dart';
 import 'package:shawati/Feature/home/data/model/home_model/service.dart';
+import 'package:shawati/Feature/home/presentation/views/screens/google_maps_screen.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/schedule_screen.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/calendar_details.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/map_widget.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/owner_product.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/product_image.dart';
 import 'package:shawati/generated/l10n.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 
-class ProductDetailsScreenBody extends StatelessWidget {
+class ProductDetailsScreenBody extends StatefulWidget {
   const ProductDetailsScreenBody(
       {super.key, required this.model, required this.owner});
   final Service model;
   final ContactDetails owner;
+
+  @override
+  State<ProductDetailsScreenBody> createState() =>
+      _ProductDetailsScreenBodyState();
+}
+
+class _ProductDetailsScreenBodyState extends State<ProductDetailsScreenBody> {
+  List<Marker> markers = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      markers.add(Marker(
+        point: LatLng(
+            widget.model.lat != '' &&
+                    widget.model.lat != 'null' &&
+                    widget.model.lat != null
+                ? double.parse(widget.model.lat.toString())
+                : 0,
+            widget.model.lng != '' &&
+                    widget.model.lng != 'null' &&
+                    widget.model.lng != null
+                ? double.parse(widget.model.lng.toString())
+                : 0),
+        child: const Icon(
+          Icons.location_pin,
+          size: 60,
+          color: Colors.red,
+        ),
+      ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("aha ${model.lat} ${model.lng}");
+    print("aha ${widget.model.lat} ${widget.model.lng}");
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -32,15 +69,15 @@ class ProductDetailsScreenBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ProductImage(
-                image: model.image ?? '',
-                name: model.name ?? '',
-                nameAr: model.nameAr ?? '',
-                place: model.place ?? '',
-                rate: model.rate ?? 5,
-                bed: model.bed ?? 0,
-                bath: model.bath ?? 0,
-                floor: model.floor ?? 0,
-                price: model.priceWithCommission ?? 0),
+                image: widget.model.image ?? '',
+                name: widget.model.name ?? '',
+                nameAr: widget.model.nameAr ?? '',
+                place: widget.model.place ?? '',
+                rate: widget.model.rate ?? 5,
+                bed: widget.model.bed ?? 0,
+                bath: widget.model.bath ?? 0,
+                floor: widget.model.floor ?? 0,
+                price: widget.model.price ?? 0),
             const SizedBox(
               height: 10,
             ),
@@ -52,7 +89,7 @@ class ProductDetailsScreenBody extends StatelessWidget {
               height: 8,
             ),
             Text(
-              model.description ?? '',
+              widget.model.description ?? '',
               style: StylesData.font11.copyWith(color: Colors.grey),
             ),
             const SizedBox(
@@ -65,29 +102,32 @@ class ProductDetailsScreenBody extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            OwnerProduct(owner: owner),
+            OwnerProduct(owner: widget.owner),
             const SizedBox(
               height: 8,
             ),
             CalendarDetails(
-              fromdate: '${model.days}',
-              todate: '${model.days}',
+              fromdate: '${widget.model.days}',
+              todate: '${widget.model.days}',
             ),
             const SizedBox(
               height: 8,
             ),
             SizedBox(
-              height: 300,
-              child: MapFlutter(
-                latLng: LatLng(
-                    model.lat != '' && model.lat != 'null' && model.lat != null
-                        ? double.parse(model.lat.toString())
-                        : 0,
-                    model.lng != '' && model.lng != 'null' && model.lng != null
-                        ? double.parse(model.lng.toString())
-                        : 0),
-              ),
-            ),
+                height: 300,
+                child: FlutterMaps(
+                  latLng: LatLng(
+                      widget.model.lat != '' &&
+                              widget.model.lat != 'null' &&
+                              widget.model.lat != null
+                          ? double.parse(widget.model.lat.toString())
+                          : 0,
+                      widget.model.lng != '' &&
+                              widget.model.lng != 'null' &&
+                              widget.model.lng != null
+                          ? double.parse(widget.model.lng.toString())
+                          : 0),
+                )),
             const SizedBox(
               height: 10,
             ),
@@ -96,8 +136,8 @@ class ProductDetailsScreenBody extends StatelessWidget {
                   NavegatorPush(
                       context,
                       ScheduleScreen(
-                        id: model.id!,
-                        days: model.days.toString(),
+                        id: widget.model.id!,
+                        days: widget.model.days.toString(),
                       ));
                 },
                 textWidget: Text(
@@ -111,4 +151,53 @@ class ProductDetailsScreenBody extends StatelessWidget {
       ),
     );
   }
+
+  Widget FlutterMaps({
+    required LatLng latLng,
+  }) =>
+      FlutterMap(
+        options: MapOptions(
+            initialCenter: latLng.latitude == 0.0
+                ? const LatLng(30.24298477377279, 20.193709855752914)
+                : latLng,
+            initialZoom: 11,
+            interactionOptions:
+                const InteractionOptions(flags: InteractiveFlag.doubleTapZoom)),
+        children: [
+          InkWell(
+            onTap: () {
+              NavegatorPush(
+                  context,
+                  FlutterMapsScreen(
+                    latLng: LatLng(
+                        widget.model.lat != '' &&
+                                widget.model.lat != 'null' &&
+                                widget.model.lat != null
+                            ? double.parse(widget.model.lat.toString())
+                            : 0,
+                        widget.model.lng != '' &&
+                                widget.model.lng != 'null' &&
+                                widget.model.lng != null
+                            ? double.parse(widget.model.lng.toString())
+                            : 0),
+                  ));
+            },
+            child: TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+            ),
+          ),
+          RichAttributionWidget(
+            attributions: [
+              TextSourceAttribution(
+                'OpenStreetMap contributors',
+                onTap: () => launchUrl(
+                  Uri.parse('https://openstreetmap.org/copyright'),
+                ),
+              ),
+            ],
+          ),
+          MarkerLayer(markers: markers)
+        ],
+      );
 }

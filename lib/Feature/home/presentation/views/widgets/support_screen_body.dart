@@ -157,9 +157,15 @@ class _SupportScreenBodyState extends State<SupportScreenBody> {
                   ),
                   defaultButton(
                       fun: () {
+                        print(
+                            '////// ${callusController.text} $emailusController');
+                        print('////// $note1controller $note2controller');
+
                         BlocProvider.of<SupportCubit>(context).addSupport(
-                            subject: '$callusController $emailusController',
-                            message: '$note1controller $note2controller');
+                            subject:
+                                '${callusController.text} ${emailusController.text}',
+                            message:
+                                '${note1controller.text} ${note2controller.text}');
                         // NavegatorPush(context, const LangPageView());
                       },
                       textWidget: state is SupportLoading

@@ -251,9 +251,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                               String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
                               RegExp regExp = RegExp(pattern);
                               if (value == null || value.number.isEmpty) {
-                                return 'Sila masukkan nombor telefon.';
+                                return S.of(context).phone_eroor;
                               } else if (!regExp.hasMatch(value.number)) {
-                                return 'Sila masukkan nombor telefon yang sah.';
+                                return S.of(context).phone_eroor;
                               }
                               return null;
                             },

@@ -5,6 +5,7 @@ import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/data/model/home_model/contact_details.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OwnerProduct extends StatelessWidget {
   const OwnerProduct({
@@ -47,8 +48,8 @@ class OwnerProduct extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {
-              textNumber(number: owner.phone ?? '');
+            onTap: () async {
+              await textNumber(number: '01020400451' ?? '');
             },
             child: Container(
               height: 40,
@@ -73,8 +74,14 @@ class OwnerProduct extends StatelessWidget {
             width: 10,
           ),
           InkWell(
-            onTap: () {
-              openDialPad(owner.phone ?? '');
+            onTap: () async {
+              Uri url = Uri(scheme: "tel", path: '+201020403050');
+              print(await canLaunchUrl(url));
+              if (await canLaunchUrl(url)) {
+                await launchUrl(url);
+              } else {
+                print("Can't open dial pad.");
+              }
             },
             child: Container(
               height: 40,

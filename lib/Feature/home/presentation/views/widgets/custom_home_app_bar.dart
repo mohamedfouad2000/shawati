@@ -14,6 +14,8 @@ import 'package:shawati/Feature/home/presentation/views/manager/Home%20Cubit/hom
 import 'package:shawati/Feature/home/presentation/views/manager/profile%20cubit/profile_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/profile%20cubit/profile_state.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/notification_screen.dart';
+import 'package:shawati/Feature/home/presentation/views/screens/profile_edit_screen.dart';
+import 'package:shawati/Feature/location/presentation/views/enable_location_view.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
   const CustomHomeAppBar({
@@ -30,20 +32,25 @@ class CustomHomeAppBar extends StatelessWidget {
         if (state is ProfileSucc) {
           return Row(
             children: [
-              Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey, width: .7),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(13),
-                    )),
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Image(
-                    image: AssetImage(AssetsData.locationIcon),
-                    height: 15,
-                    width: 15,
+              InkWell(
+                onTap: () {
+                  NavegatorPush(context, const EnableLocation());
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: .7),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(13),
+                      )),
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Image(
+                      image: AssetImage(AssetsData.locationIcon),
+                      height: 15,
+                      width: 15,
+                    ),
                   ),
                 ),
               ),
@@ -93,27 +100,32 @@ class CustomHomeAppBar extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Container(
-                height: 50,
-                width: 50,
-                decoration: const BoxDecoration(
-                    // image: DecorationImage(
-                    //   image: AssetImage(AssetsData.testimage),
-                    // ),
-                    borderRadius: BorderRadius.all(
-                  Radius.circular(13),
-                )),
-                child: CachedNetworkImage(
-                  imageUrl: '$xURLIMAGE${state.model.data?.image}',
-                  placeholder: (context, url) =>
-                      LoadingAnimationWidget.newtonCradle(
-                    size: 50,
-                    color: Colors.grey,
-                  ),
-                  errorWidget: (context, url, er) => Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
+              InkWell(
+                onTap: () {
+                  NavegatorPush(context, const ProfileInfoScreen());
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: const BoxDecoration(
+                      // image: DecorationImage(
+                      //   image: AssetImage(AssetsData.testimage),
+                      // ),
+                      borderRadius: BorderRadius.all(
+                    Radius.circular(13),
+                  )),
+                  child: CachedNetworkImage(
+                    imageUrl: '$xURLIMAGE${state.model.data?.image}',
+                    placeholder: (context, url) =>
+                        LoadingAnimationWidget.newtonCradle(
+                      size: 50,
+                      color: Colors.grey,
+                    ),
+                    errorWidget: (context, url, er) => Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

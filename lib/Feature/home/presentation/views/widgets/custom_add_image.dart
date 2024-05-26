@@ -4,6 +4,7 @@ import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/styles.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class CustomAddImage extends StatelessWidget {
   const CustomAddImage({
@@ -31,17 +32,17 @@ class CustomAddImage extends StatelessWidget {
             text: TextSpan(
               children: <TextSpan>[
                 TextSpan(
-                    text: 'Drop your files here, or ',
+                    text: S.of(context).Drop_your_files_here_or,
                     style: StylesData.font11.copyWith(color: Colors.black)),
                 TextSpan(
-                    text: 'browse',
+                    text: S.of(context).browse,
                     style: StylesData.font11
                         .copyWith(color: ConstColor.kMainColor)),
               ],
             ),
           ),
           Text(
-            "JPG, PNG, PDF (Max 800x400px - 2Mo)",
+            S.of(context).imageSize,
             style: StylesData.font9,
           )
         ],

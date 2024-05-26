@@ -38,8 +38,8 @@ class FavScreenList extends StatelessWidget {
                 return const Expanded(child: Center(child: EmptyWidget()));
               }
               return GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  // shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
                   // mainAxisSpacing: 10,
@@ -76,7 +76,7 @@ Widget item(context,
       onTap: () {
         NavegatorPush(
             context,
-            ProductDetailsScreenFav(
+            ProductDetailsScreen(
               model: model!,
               owner: owner,
             ));
@@ -105,7 +105,7 @@ Widget item(context,
                       child: CachedImage('$xURLIMAGE${model?.image}'),
                     ),
                     if (BlocProvider.of<AddOrRemoveFavCubit>(context)
-                            .favoritesListFav[model?.id] ==
+                            .favouritesList[model?.id] ==
                         true)
                       Positioned(
                         right: 8,
@@ -144,11 +144,14 @@ Widget item(context,
                 const SizedBox(
                   width: 10,
                 ),
-                Text(
-                  LocalizationCubit.get(context).isArabic()
-                      ? '${model?.nameAr}'
-                      : '${model?.name}',
-                  style: StylesData.font13.copyWith(color: Colors.black),
+                Expanded(
+                  child: Text(
+                    LocalizationCubit.get(context).isArabic()
+                        ? '${model?.nameAr}'
+                        : '${model?.name}',
+                    maxLines: 2,
+                    style: StylesData.font13.copyWith(color: Colors.black),
+                  ),
                 ),
               ],
             ),
@@ -184,7 +187,7 @@ Widget item(context,
                   width: 4,
                 ),
                 Text(
-                  "${S.of(context).SAR} ${model?.priceWithCommission} ",
+                  "${S.of(context).SAR} ${model?.price} ",
                   style: StylesData.font8.copyWith(
                     color: ConstColor.kMainColor,
                   ),

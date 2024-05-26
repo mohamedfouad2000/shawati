@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shawati/Feature/home/data/model/search_model/search_model.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/Add%20Or%20Remove%20Fav/add_or_remove_fav_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
@@ -9,7 +10,7 @@ class SearchCubit extends Cubit<SearchState> {
   final HomeRepo repo;
 
   static SearchCubit get(context) => BlocProvider.of(context);
-  Map<int, bool> favoritesListSearch = {};
+  // Map<int, bool> favoritesListSearch = {};
 
   void setallempty() {
     text = '';
@@ -41,25 +42,21 @@ class SearchCubit extends Cubit<SearchState> {
   SearchModel? model = SearchModel();
   double? lat;
   double? long;
-  void changeIcon({required int id}) {
-    favoritesListSearch[id] = !favoritesListSearch[id]!;
-    emit(ChangeIcon());
-  }
 
-  Future<void> searchData({
-    required String text,
-    required String categoryId,
-    required String minPrice,
-    required String maxPrice,
-    required String bed,
-    required String floor,
-    required String bath,
-    required String priceDuration,
-    required String minarea,
-    required String maxarea,
-    required double lat,
-    required double long,
-  }) async {
+  Future<void> searchData(
+      {required String text,
+      required String categoryId,
+      required String minPrice,
+      required String maxPrice,
+      required String bed,
+      required String floor,
+      required String bath,
+      required String priceDuration,
+      required String minarea,
+      required String maxarea,
+      required double lat,
+      required double long,
+      required context}) async {
     emit(SearchDataLoading());
     final result = await repo.searchData(
         text: text,
@@ -79,7 +76,8 @@ class SearchCubit extends Cubit<SearchState> {
       (r) {
         model = r;
         r.data?.services?.forEach((element) {
-          favoritesListSearch
+          AddOrRemoveFavCubit.get(context)
+              .favouritesList
               .addAll({element.id!: element.isFavorite == 0 ? false : true});
         });
 

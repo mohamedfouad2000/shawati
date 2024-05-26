@@ -4,6 +4,8 @@ import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_state.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
+import 'package:shawati/generated/l10n.dart';
 
 List<String> titles = [
   'Daily',
@@ -22,10 +24,14 @@ class PriceDuration extends StatefulWidget {
 }
 
 class _PriceDurationState extends State<PriceDuration> {
-  // int currentIndexduration = 0;
-
   @override
   Widget build(BuildContext context) {
+    List titlesArabic = [
+      S.of(context).Daily,
+      S.of(context).weekly,
+      S.of(context).Monthly,
+      S.of(context).Yearly,
+    ];
     return BlocConsumer<SearchCubit, SearchState>(
       listener: (context, state) {
         // TODO: implement listener
@@ -35,7 +41,7 @@ class _PriceDurationState extends State<PriceDuration> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Price duration",
+              S.of(context).priceduration,
               style: StylesData.font16,
             ),
             const SizedBox(
@@ -46,7 +52,10 @@ class _PriceDurationState extends State<PriceDuration> {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  return typeItem(name: titles[index], index: index);
+                  return typeItem(
+                      name: titles[index],
+                      index: index,
+                      nameAra: titlesArabic[index]);
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(
@@ -62,7 +71,8 @@ class _PriceDurationState extends State<PriceDuration> {
     );
   }
 
-  Widget typeItem({required String name, required int index}) {
+  Widget typeItem(
+      {required String name, required int index, required String nameAra}) {
     return InkWell(
       onTap: () {
         setState(() {
@@ -82,7 +92,7 @@ class _PriceDurationState extends State<PriceDuration> {
             border: Border.all(color: Colors.grey.shade300)),
         child: Center(
           child: Text(
-            name,
+            LocalizationCubit.get(context).isArabic() ? nameAra : name,
             style: StylesData.font17.copyWith(
                 fontSize: 15,
                 color: SearchCubit.get(context).priceDuration == index

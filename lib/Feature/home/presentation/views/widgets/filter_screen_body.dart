@@ -16,6 +16,7 @@ import 'package:shawati/Feature/home/presentation/views/widgets/floor.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/price_duration.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/price_filter.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/type_filter.dart';
+import 'package:shawati/generated/l10n.dart';
 
 // import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -60,7 +61,7 @@ class _FilterScreenBodyState extends State<FilterScreenBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Filter",
+                  S.of(context).filter,
                   style: StylesData.font24Google,
                 ),
                 const SizedBox(
@@ -153,7 +154,7 @@ class _FilterScreenBodyState extends State<FilterScreenBody> {
                                   : ''));
                     },
                     textWidget: Text(
-                      'Apply filters',
+                      S.of(context).ApplayFilter,
                       style: StylesData.font13,
                     ),
                     height: 54,

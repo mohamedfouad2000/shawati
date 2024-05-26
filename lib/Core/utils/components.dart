@@ -1,6 +1,7 @@
 // import 'package:country_picker/country_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -342,7 +343,9 @@ AppBar customAppBarInNotification(context) {
       InkWell(
         onTap: () {},
         child: Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: EdgeInsets.only(
+                right: LocalizationCubit.get(context).isArabic() ? 0.0 : 8.0,
+                left: LocalizationCubit.get(context).isArabic() ? 8.0 : 0.0),
             child: Row(
               children: [
                 const Stack(
@@ -408,45 +411,45 @@ AppBar customAppBarWithCallender(context) {
         ),
       ),
     ),
-    actions: [
-      InkWell(
-        onTap: () {
-          // NavegatorPush(context, const NotificationScreen());
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: Container(
-            height: 45,
-            width: 125,
-            decoration: BoxDecoration(
-                border:
-                    Border.all(color: Colors.grey.withOpacity(.5), width: .7),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(12),
-                )),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ImageIcon(
-                  const AssetImage(AssetsData.note),
-                  size: 20,
-                  color: ConstColor.kMainColor,
-                ),
-                Text(
-                  " For Rent ",
-                  style: StylesData.font10.copyWith(
-                      color: const Color(0xff222B45),
-                      fontWeight: FontWeight.w400),
-                ),
-                const Icon(
-                  Icons.keyboard_arrow_down,
-                  color: Colors.grey,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+    actions: const [
+      // InkWell(
+      //   onTap: () {
+      //     // NavegatorPush(context, const NotificationScreen());
+      //   },
+      //   child: Padding(
+      //     padding: const EdgeInsets.only(right: 8.0),
+      //     child: Container(
+      //       height: 45,
+      //       width: 125,
+      //       decoration: BoxDecoration(
+      //           border:
+      //               Border.all(color: Colors.grey.withOpacity(.5), width: .7),
+      //           borderRadius: const BorderRadius.all(
+      //             Radius.circular(12),
+      //           )),
+      //       child: Row(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           ImageIcon(
+      //             const AssetImage(AssetsData.note),
+      //             size: 20,
+      //             color: ConstColor.kMainColor,
+      //           ),
+      //           Text(
+      //             " For Rent ",
+      //             style: StylesData.font10.copyWith(
+      //                 color: const Color(0xff222B45),
+      //                 fontWeight: FontWeight.w400),
+      //           ),
+      //           const Icon(
+      //             Icons.keyboard_arrow_down,
+      //             color: Colors.grey,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
     ],
   );
 }
@@ -509,7 +512,7 @@ Future<LocationData> getloction() async {
   // long = locationdata.longitude;
 }
 
-textNumber({required String number}) async {
+Future<void> textNumber({required String number}) async {
   // Android
   var uri = 'sms:$number?body=hello%20there';
   if (await canLaunch(uri)) {
@@ -522,6 +525,15 @@ textNumber({required String number}) async {
     } else {
       throw 'Could not launch $uri';
     }
+  }
+}
+
+openDialPad1(String phoneNumber) async {
+  Uri url = Uri(scheme: "tel", path: phoneNumber);
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    print("Can't open dial pad.");
   }
 }
 

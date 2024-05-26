@@ -17,6 +17,7 @@ import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/home_view.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Booking%20cubit/booking_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Booking%20cubit/booking_state.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
 
 import 'package:shawati/Feature/home/presentation/views/widgets/amount_payment.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/custom_add_image.dart';
@@ -74,7 +75,7 @@ class _PaymentScreenBodyState extends State<PaymentScreenBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Payment",
+                  S.of(context).Payment,
                   style: StylesData.font24Google,
                 ),
                 const SizedBox(
@@ -88,8 +89,8 @@ class _PaymentScreenBodyState extends State<PaymentScreenBody> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Choose The Payment Method",
+                        Text(
+                          S.of(context).Choose_The_Payment_Method,
                         ),
                         Container(
                             padding: const EdgeInsets.all(16),
@@ -105,7 +106,9 @@ class _PaymentScreenBodyState extends State<PaymentScreenBody> {
                                     value: value,
                                     alignment: AlignmentDirectional.centerStart,
                                     isExpanded: true,
-                                    hint: const Text('Select a Payment'),
+                                    hint: Text(S
+                                        .of(context)
+                                        .Choose_The_Payment_Method),
                                     onChanged: (String? selecteddata) {
                                       setState(() {
                                         value = selecteddata;
@@ -126,7 +129,11 @@ class _PaymentScreenBodyState extends State<PaymentScreenBody> {
                                               height: 30,
                                             ),
                                             const SizedBox(width: 10),
-                                            Text(item.name ?? ''),
+                                            Text((LocalizationCubit.get(context)
+                                                        .isArabic()
+                                                    ? item.nameAr
+                                                    : item.name) ??
+                                                ''),
                                           ],
                                         ),
                                       );
@@ -143,8 +150,8 @@ class _PaymentScreenBodyState extends State<PaymentScreenBody> {
                           width: double.infinity,
                           color: Colors.grey.shade300,
                         ),
-                        const Text(
-                          "Upload your payment screen here",
+                        Text(
+                          S.of(context).Upload_your_payment_screen_here,
                         ),
                         const SizedBox(
                           height: 5,

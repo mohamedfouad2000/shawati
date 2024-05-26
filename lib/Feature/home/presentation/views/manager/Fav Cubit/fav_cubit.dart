@@ -18,10 +18,10 @@ class FavCubit extends Cubit<FavState> {
     result.fold((l) => emit(FavFailed(message: l.msq.toString())), (r) {
       r.data?.favorites?.forEach((element) {
         AddOrRemoveFavCubit.get(context)
-            .favoritesListFav
+            .favouritesList
             .addAll({element.service!.id!: true});
         print(
-            "fav is ${AddOrRemoveFavCubit.get(context).favoritesListFav.toString()}");
+            "fav is ${AddOrRemoveFavCubit.get(context).favouritesList.toString()}");
       });
       emit(FavSuccess(model: r));
     });

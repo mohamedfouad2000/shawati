@@ -29,7 +29,7 @@ class BookingDetailsScreenBody extends StatelessWidget {
                 floor: model.floor.toString(),
                 clockin: model.days ?? '',
                 clockout: model.days ?? '',
-                price: model.priceWithCommission.toString(),
+                price: model.price.toString(),
                 image: model.image ?? ''),
             const SizedBox(
               height: 15,

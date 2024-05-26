@@ -11,6 +11,7 @@ import 'package:shawati/Feature/home/presentation/views/home_view.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Booking%20cubit/booking_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Booking%20cubit/booking_state.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/payment_screen.dart';
+import 'package:shawati/Feature/home/presentation/views/widgets/calendar_details.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/date_time_range.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/schedule_clock_in_out.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/schedule_range.dart';
@@ -26,6 +27,14 @@ class ScheduleScreenBody extends StatefulWidget {
 }
 
 class _ScheduleScreenBodyState extends State<ScheduleScreenBody> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // BlocProvider.of<BookingCubit>(context).checkin = null;
+    // BlocProvider.of<BookingCubit>(context).checkout = null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -43,96 +52,101 @@ class _ScheduleScreenBodyState extends State<ScheduleScreenBody> {
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(context).schedule,
-                  style: StylesData.font24Google,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                if (BlocProvider.of<BookingCubit>(context).checkin != '' &&
-                    BlocProvider.of<BookingCubit>(context).checkout != '' &&
-                    BlocProvider.of<BookingCubit>(context).checkin != null &&
-                    BlocProvider.of<BookingCubit>(context).checkout != null)
-                  const ScheduleRange(),
-                if (BlocProvider.of<BookingCubit>(context).checkin != '' &&
-                    BlocProvider.of<BookingCubit>(context).checkout != '')
-                  const SizedBox(
-                    height: 18,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    S.of(context).schedule,
+                    style: StylesData.font24Google,
                   ),
-                ScheduleClockInOut(
-                  from: widget.days
-                      .split(',')
-                      .first
-                      .replaceAll('[', '')
-                      .replaceAll(']', '')
-                      .replaceAll('"', '')
-                      .replaceAll('\\', '')
-                      .trim(),
-                  to: widget.days
-                      .split(',')
-                      .last
-                      .replaceAll('[', '')
-                      .replaceAll(']', '')
-                      .replaceAll('"', '')
-                      .replaceAll('\\', '')
-                      .trim(),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                if (widget.days != null || widget.days != '')
-                  DateTimeSchedleRange(from: widget.days),
-                if (widget.days != null || widget.days != '')
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
-                const Spacer(),
-                if (BlocProvider.of<BookingCubit>(context).checkin != '' &&
-                    BlocProvider.of<BookingCubit>(context).checkout != '' &&
-                    BlocProvider.of<BookingCubit>(context).checkin != null &&
-                    BlocProvider.of<BookingCubit>(context).checkout != null)
-                  defaultButton(
-                      fun: () {
-                        // BlocProvider.of<BookingCubit>(context).addBooking(
-                        //     id: widget.id,
-                        //     start: DateFormat('yyyy-MM-dd').format(
-                        //         BlocProvider.of<BookingCubit>(context)
-                        //                 .checkin ??
-                        //             DateTime.now()),
-                        //     end: DateFormat('yyyy-MM-dd').format(
-                        //         BlocProvider.of<BookingCubit>(context)
-                        //                 .checkout ??
-                        //             DateTime.now()));
-                        NavegatorPush(
-                            context,
-                            PaymentScreen(
-                                id: widget.id,
-                                start: DateFormat('MM/dd/yyyy').format(
-                                    BlocProvider.of<BookingCubit>(context)
-                                            .checkin ??
-                                        DateTime.now()),
-                                end: DateFormat('MM/dd/yyyy').format(
-                                    BlocProvider.of<BookingCubit>(context)
-                                            .checkout ??
-                                        DateTime.now())));
-                      },
-                      textWidget: state is ADDBookingLoading
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
+                  if (BlocProvider.of<BookingCubit>(context).checkin != '' &&
+                      BlocProvider.of<BookingCubit>(context).checkout != '' &&
+                      BlocProvider.of<BookingCubit>(context).checkin != null &&
+                      BlocProvider.of<BookingCubit>(context).checkout != null)
+                    const ScheduleRange(),
+                  if (BlocProvider.of<BookingCubit>(context).checkin != '' &&
+                      BlocProvider.of<BookingCubit>(context).checkout != '')
+                    const SizedBox(
+                      height: 18,
+                    ),
+                  ScheduleClockInOut(
+                    from: widget.days
+                        .split(',')
+                        .first
+                        .replaceAll('[', '')
+                        .replaceAll(']', '')
+                        .replaceAll('"', '')
+                        .replaceAll('\\', '')
+                        .trim(),
+                    to: widget.days
+                        .split(',')
+                        .last
+                        .replaceAll('[', '')
+                        .replaceAll(']', '')
+                        .replaceAll('"', '')
+                        .replaceAll('\\', '')
+                        .trim(),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  if (widget.days != null || widget.days != '')
+                    CalendarDetails(
+                      fromdate: widget.days,
+                      todate: widget.days,
+                    ),
+                  if (widget.days != null || widget.days != '')
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  // const Spacer(),
+                  if (BlocProvider.of<BookingCubit>(context).checkin != '' &&
+                      BlocProvider.of<BookingCubit>(context).checkout != '' &&
+                      BlocProvider.of<BookingCubit>(context).checkin != null &&
+                      BlocProvider.of<BookingCubit>(context).checkout != null)
+                    defaultButton(
+                        fun: () {
+                          // BlocProvider.of<BookingCubit>(context).addBooking(
+                          //     id: widget.id,
+                          //     start: DateFormat('yyyy-MM-dd').format(
+                          //         BlocProvider.of<BookingCubit>(context)
+                          //                 .checkin ??
+                          //             DateTime.now()),
+                          //     end: DateFormat('yyyy-MM-dd').format(
+                          //         BlocProvider.of<BookingCubit>(context)
+                          //                 .checkout ??
+                          //             DateTime.now()));
+                          NavegatorPush(
+                              context,
+                              PaymentScreen(
+                                  id: widget.id,
+                                  start: DateFormat('MM/dd/yyyy').format(
+                                      BlocProvider.of<BookingCubit>(context)
+                                              .checkin ??
+                                          DateTime.now()),
+                                  end: DateFormat('MM/dd/yyyy').format(
+                                      BlocProvider.of<BookingCubit>(context)
+                                              .checkout ??
+                                          DateTime.now())));
+                        },
+                        textWidget: state is ADDBookingLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                S.of(context).Confirm,
+                                style: StylesData.font13,
                               ),
-                            )
-                          : Text(
-                              S.of(context).Confirm,
-                              style: StylesData.font13,
-                            ),
-                      height: 54,
-                      c: ConstColor.kMainColor),
-              ],
+                        height: 54,
+                        c: ConstColor.kMainColor),
+                ],
+              ),
             ),
           );
         },

@@ -20,7 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
         model = r;
         r.data?.services?.forEach((element) {
           AddOrRemoveFavCubit.get(context)
-              .favoritesListHome
+              .favouritesList
               .addAll({element.id!: element.isFavorite == 0 ? false : true});
         });
         // print('isFavorite is ${isFavoriteHome.toString()}');

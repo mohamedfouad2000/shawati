@@ -35,6 +35,7 @@ class SearchWidget extends StatelessWidget {
                   onChanged: (i) {
                     SearchCubit.get(context).text = i;
                     SearchCubit.get(context).searchData(
+                      context: context,
                         lat: SearchCubit.get(context).lat ?? 0.0,
                         long: SearchCubit.get(context).long ?? 0.0,
                         text: i,

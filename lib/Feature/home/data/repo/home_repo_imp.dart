@@ -307,6 +307,8 @@ class HomeRepoImpl extends HomeRepo {
   Future<Either<Failure, String>> addSupport(
       {required String subject, required String message}) async {
     try {
+      print(subject);
+      print(message);
       Response<dynamic> res = await DioHelper.postData(
           url: xSupport,
           data: {},
@@ -431,6 +433,7 @@ class HomeRepoImpl extends HomeRepo {
         url: xGetMinMaxPrice,
         data: {},
       );
+      print("aha");
       print(res.data);
       if (res.data["status"] == 201) {
         model = MinMaxModel.fromJson(res.data);

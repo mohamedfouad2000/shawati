@@ -70,9 +70,11 @@ class BookingScreen extends StatelessWidget {
                                 alignment: Alignment.bottomRight,
                                 children: [
                                   ProductData(
-                                      title:
-                                          state.Model.data?.upcoming?[index].service?.name ??
-                                              '',
+                                      id: state.Model.data?.rental?[index].service?.id ??
+                                          0,
+                                      title: state.Model.data?.upcoming?[index]
+                                              .service?.name ??
+                                          '',
                                       subTitlearab: state
                                               .Model
                                               .data
@@ -97,10 +99,7 @@ class BookingScreen extends StatelessWidget {
                                       image: state.Model.data?.upcoming?[index]
                                               .service?.image ??
                                           '',
-                                      money: state.Model.data?.upcoming?[index]
-                                              .service?.priceWithCommission
-                                              .toString() ??
-                                          ''),
+                                      money: state.Model.data?.upcoming?[index].service?.price.toString() ?? ''),
                                   Positioned(
                                     right: LocalizationCubit.get(context)
                                             .isArabic()
@@ -187,26 +186,35 @@ class BookingScreen extends StatelessWidget {
                               return Stack(
                                 alignment: Alignment.bottomRight,
                                 children: [
-                                  ProductData(
-                                      subTitlearab: state.Model.data
-                                              ?.rental?[index].service?.place ??
-                                          '',
-                                      titlearab: state.Model.data
-                                              ?.rental?[index].service?.name ??
-                                          '',
-                                      title: state.Model.data?.rental?[index]
-                                              .service?.name ??
-                                          '',
-                                      subTitle: state.Model.data?.rental?[index]
-                                              .service?.place ??
-                                          '',
-                                      image: state.Model.data?.rental?[index]
-                                              .service?.image ??
-                                          '',
-                                      money: state.Model.data?.rental?[index]
-                                              .service?.priceWithCommission
-                                              .toString() ??
-                                          ''),
+                                  InkWell(
+                                    onTap: (){
+                                      NavegatorPush(
+                                                context,
+                                                BookingDetailsScreen(
+                                                  model: state.Model.data!
+                                                      .rental![index].service!,
+                                                ));
+                                    },
+                                    child: ProductData(
+                                        id: state.Model.data?.rental?[index].service?.id ??
+                                            0,
+                                        subTitlearab: state.Model.data
+                                                ?.rental?[index].service?.place ??
+                                            '',
+                                        titlearab: state.Model.data
+                                                ?.rental?[index].service?.name ??
+                                            '',
+                                        title: state.Model.data?.rental?[index]
+                                                .service?.name ??
+                                            '',
+                                        subTitle: state.Model.data?.rental?[index]
+                                                .service?.place ??
+                                            '',
+                                        image: state.Model.data?.rental?[index]
+                                                .service?.image ??
+                                            '',
+                                        money: state.Model.data?.rental?[index].service?.price.toString() ?? ''),
+                                  ),
                                   Positioned(
                                     right: LocalizationCubit.get(context)
                                             .isArabic()

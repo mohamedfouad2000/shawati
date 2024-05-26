@@ -1,7 +1,5 @@
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl_phone_field/phone_number.dart';
 import 'package:shawati/Core/constans/const.dart';
 import 'package:shawati/Core/local/cache_Helper.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -11,7 +9,7 @@ import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/components.dart';
 
 import 'package:shawati/Core/utils/styles.dart';
-import 'package:shawati/Feature/home/presentation/views/home_view.dart';
+import 'package:shawati/Feature/home/presentation/views/screens/terms_screen.dart';
 import 'package:shawati/Feature/location/presentation/views/enable_location_view.dart';
 import 'package:shawati/Feature/register/data/repo/register_repo_imple.dart';
 import 'package:shawati/Feature/register/presentation/manager/cubit/register_cubit.dart';
@@ -358,11 +356,16 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                                 S.of(context).Iacceptallthe,
                                 style: StylesData.font12,
                               ),
-                              Text(
-                                S.of(context).termsconditions,
-                                style: StylesData.font12.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w800),
+                              InkWell(
+                                onTap: () {
+                                  NavegatorPush(context, const TermsScreen());
+                                },
+                                child: Text(
+                                  S.of(context).termsconditions,
+                                  style: StylesData.font12.copyWith(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w800),
+                                ),
                               ),
                             ],
                           ),

@@ -22,23 +22,26 @@ class _ScheduleClockInOutState extends State<ScheduleClockInOut> {
   List<DateTime> Times = [];
   List<int> dates = [];
 
-  // Function to check if a date is selectable
-  bool _isSelectable(DateTime day) {
-    return dates.contains(day.day);
-  }
+  // // Function to check if a date is selectable
+  // bool _isSelectable(DateTime day) {
+  //   return dates.contains(day.day);
+  // }
 
-  bool _isSelectableDate(DateTime day) {
-    // Define the logic to determine which dates are selectable
-    // For example, let's allow only even days in the month of May 2024
-    if (day.year == 2024 && day.month == 5) {
-      return day.day.isOdd;
-    }
-    // By default, all other dates are selectable
-    return true;
-  }
+  // bool _isSelectableDate(DateTime day) {
+  //   // Define the logic to determine which dates are selectable
+  //   // For example, let's allow only even days in the month of May 2024
+  //   if (day.year == 2024 && day.month == 5) {
+  //     return day.day.isOdd;
+  //   }
+  //   // By default, all other dates are selectable
+  //   return true;
+  // }
 
-  // @override
-  // void initState() {
+  @override
+  void initState() {
+    super.initState();
+    print("The day is ${widget.from}");
+  }
   //   // TODO: implement initState
   //   super.initState();
   //   String days = widget.from
@@ -80,24 +83,27 @@ class _ScheduleClockInOutState extends State<ScheduleClockInOut> {
               context: context,
               // selectableDayPredicate: _isSelectable,
               initialDate: widget.from != ''
-                  ? DateFormat("MM/dd/yyyy ").parse(widget.from.trim())
+                  ? DateFormat.yMd('en_US')
+                      .parseLoose(widget.from.trim().substring(0, 10))
                   : DateTime.now(),
               firstDate: widget.from != ''
-                  ? DateFormat("MM/dd/yyyy ").parse(widget.from.trim())
+                  ? DateFormat.yMd('en_US')
+                      .parseLoose(widget.from.trim().substring(0, 10))
                   : DateTime.now(),
               lastDate: BlocProvider.of<BookingCubit>(context).checkout ??
                   (widget.to != ''
-                      ? DateFormat("MM/dd/yyyy ").parse(widget.to.trim())
+                      ? DateFormat.yMd('en_US')
+                          .parseLoose(widget.to.trim().substring(0, 10))
                       : DateTime.now().add(const Duration(days: 30))),
             );
 
             if (pickedDate != null) {
               print(
                   pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-              String formattedDate =
-                  DateFormat('dd/MMMM/yyyy').format(pickedDate);
-              print(
-                  formattedDate); //formatted date output using intl package =>  2021-03-16
+              // String formattedDate =
+              //     DateFormat('dd/MMMM/yyyy').format(pickedDate);
+              // print(
+              //     formattedDate); //formatted date output using intl package =>  2021-03-16
               setState(() {
                 BlocProvider.of<BookingCubit>(context)
                     .changecheckin(pickedDate);
@@ -148,15 +154,18 @@ class _ScheduleClockInOutState extends State<ScheduleClockInOut> {
               // selectableDayPredicate: _isSelectable,
               initialDate: BlocProvider.of<BookingCubit>(context).checkin ??
                   (widget.from != ''
-                      ? DateFormat("MM/dd/yyyy ").parse(widget.from.trim())
+                      ? DateFormat.yMd('en_US')
+                          .parseLoose(widget.from.trim().substring(0, 10))
                       : DateTime.now()),
 
               firstDate: BlocProvider.of<BookingCubit>(context).checkin ??
                   (widget.from != ''
-                      ? DateFormat("MM/dd/yyyy ").parse(widget.from.trim())
+                      ? DateFormat.yMd('en_US')
+                          .parseLoose(widget.from.trim().substring(0, 10))
                       : DateTime.now()),
               lastDate: widget.to != ''
-                  ? DateFormat("MM/dd/yyyy ").parse(widget.to.trim())
+                  ? DateFormat.yMd('en_US')
+                      .parseLoose(widget.to.trim().substring(0, 10))
                   : DateTime.now().add(
                       const Duration(days: 30),
                     ),
@@ -168,12 +177,12 @@ class _ScheduleClockInOutState extends State<ScheduleClockInOut> {
             );
 
             if (pickedDate != null) {
-              print(
-                  pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-              String formattedDate =
-                  DateFormat('dd/MMMM/yyyy').format(pickedDate);
-              print(
-                  formattedDate); //formatted date output using intl package =>  2021-03-16
+              // print(
+              //     pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+              // String formattedDate =
+              //     DateFormat('dd/MMMM/yyyy').format(pickedDate);
+              // print(
+              //     formattedDate); //formatted date output using intl package =>  2021-03-16
               setState(() {
                 BlocProvider.of<BookingCubit>(context)
                     .changecheckout(pickedDate);

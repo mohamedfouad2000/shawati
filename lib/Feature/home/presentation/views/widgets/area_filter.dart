@@ -92,7 +92,7 @@ class _AreaFIltterState extends State<AreaFIltter> {
             ShowModeSheet(context);
           },
           textWidget: Text(
-            'Set Location',
+            S.of(context).setlocation,
             style: StylesData.font13.copyWith(color: Colors.black),
           ),
           height: 54,
@@ -111,7 +111,7 @@ class _AreaFIltterState extends State<AreaFIltter> {
                   // center: LatLong(23, 89),
                   // buttonHeight: ,
                   buttonColor: Colors.blue,
-                  buttonText: 'Set Current Location',
+                  buttonText: S.of(context).setlocation,
                   onPicked: (pickedData) {
                     setState(() {
                       SearchCubit.get(context).lat =

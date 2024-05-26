@@ -6,6 +6,7 @@ import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Get%20Max%20Min/get_max_min_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_state.dart';
+import 'package:shawati/generated/l10n.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -53,12 +54,12 @@ class _PriceFilterState extends State<PriceFilter> {
                       children: [
                         Expanded(
                           child: Text(
-                            "Price",
+                            S.of(context).price,
                             style: StylesData.font16,
                           ),
                         ),
                         Text(
-                          "SAR ${SearchCubit.get(context).minPrice.toString().substring(0, 3)} - SAR,${SearchCubit.get(context).maxPrice.toString().substring(0, 4)}",
+                          "${S.of(context).SAR} ${SearchCubit.get(context).minPrice?.toInt()} - ${S.of(context).SAR} ${SearchCubit.get(context).maxPrice?.toInt()}",
                           style: StylesData.font13.copyWith(
                               fontWeight: FontWeight.w900,
                               color: ConstColor.kMainColor),

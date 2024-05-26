@@ -8,8 +8,10 @@ import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/home_view.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Location%20cubit/location_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/screens/set_location_screen.dart';
 
 import 'package:shawati/Feature/splash/presentation/views/widgets/tqnia_logo.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class EnableLocationBody extends StatelessWidget {
   const EnableLocationBody({super.key});
@@ -37,15 +39,15 @@ class EnableLocationBody extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Enable Location',
+                  S.of(context).EnableLocation,
                   style: StylesData.font24Google,
                 ),
                 Text(
-                  'choose your location to start find the request',
+                  S.of(context).chooseLocation,
                   style: StylesData.font12,
                 ),
                 Text(
-                  'around you.',
+                  S.of(context).aroundyou,
                   style: StylesData.font12,
                 ),
                 const SizedBox(
@@ -71,7 +73,26 @@ class EnableLocationBody extends StatelessWidget {
                           lat: data.latitude!, long: data.longitude!);
                     },
                     textWidget: Text(
-                      'Allow Access',
+                      S.of(context).AllowAccess,
+                      style: StylesData.font13,
+                    ),
+                    height: 54,
+                    c: ConstColor.kMainColor),
+                const SizedBox(
+                  height: 20,
+                ),
+                defaultButton(
+                    fun: () async {
+                      LocationData? data = await getloction();
+                      print(data.latitude);
+                      print(data.longitude);
+                      NavegatorPush(context, SetLocationScreen(location: data));
+
+                      // BlocProvider.of<LocationCubit>(context).setLocation(
+                      //     lat: data.latitude!, long: data.longitude!);
+                    },
+                    textWidget: Text(
+                      S.of(context).SetLocationManually,
                       style: StylesData.font13,
                     ),
                     height: 54,
@@ -88,7 +109,7 @@ class EnableLocationBody extends StatelessWidget {
                         ));
                   },
                   child: Text(
-                    "Skip for now",
+                    S.of(context).SkipForNow,
                     style: StylesData.font14.copyWith(color: Colors.black),
                   ),
                 ),
