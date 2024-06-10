@@ -32,16 +32,22 @@ class _CalendarDetailsState extends State<CalendarDetails> {
         .replaceAll(']', '')
         .replaceAll('\\', '')
         .trim();
+    String days2 = widget.todate
+        .replaceAll('[', '')
+        .replaceAll('"', '')
+        .replaceAll(']', '')
+        .replaceAll('\\', '')
+        .trim();
     // 16-04-2024,23-04-2024,24-04-2024
     List<DateTime> Times = [];
+
     print(days);
     for (int i = 0; i < days.split(',').length; i++) {
       // print();
 
       try {
-        //05/05/2024 3:52 PM, 05/14/2024 3:52 PM, 05/09/2024 3:52 PM, 05/16/2024 3:52 PM
-        // print('ahaa');
-        // print(days.split(',')[i]);
+        // ["05\/21\/2024 12:00 AM","05\/20\/2024 12:00 AM","05\/19\/2024 12:00 AM","05\/22\/2024 12:00 AM"]
+
         DateTime x;
         //15/05/2024
         // if (LocalizationCubit.get(context).isArabic()) {
@@ -57,14 +63,22 @@ class _CalendarDetailsState extends State<CalendarDetails> {
         Times.add(x);
 
         print('Ahah is ${Times[i]}');
+        print('Ahah is ${days.split(',')[i].trim().substring(0, 10)}');
       } catch (e) {
         print('error is $e');
       }
     }
 
+    DateTime x;
+    //15/05/2024
+    // if (LocalizationCubit.get(context).isArabic()) {
+
+    x = DateFormat.yMd('en_US').parseLoose(days2.trim().substring(0, 10));
+    Times.add(x);
+
     return CalendarDatePicker2(
         config: CalendarDatePicker2Config(
-            calendarType: CalendarDatePicker2Type.multi,
+            calendarType: CalendarDatePicker2Type.range,
             centerAlignModePicker: true),
         onValueChanged: (value) {
           print(value);
@@ -82,22 +96,22 @@ class _CalendarDetailsState extends State<CalendarDetails> {
 // int.parse(fromdate.substring(0, 4)),
 //             int.parse(fromdate.substring(5, 7)),
 //             int.parse(fromdate.substring(9, 11))
-String reverseStringWithSpaces(String input) {
-  // Split the input string into words
-  List<String> words = input.split(' ');
+// String reverseStringWithSpaces(String input) {
+//   // Split the input string into words
+//   List<String> words = input.split(' ');
 
-  // Reverse the order of the words
-  List<String> reversedWords = words.reversed.toList();
+//   // Reverse the order of the words
+//   List<String> reversedWords = words.reversed.toList();
 
-  // Reverse each individual word
-  List<String> reversedIndividualWords = reversedWords.map((word) {
-    // Reverse the characters in the word
-    String reversedWord = word.split('').reversed.join('');
-    return reversedWord;
-  }).toList();
+//   // Reverse each individual word
+//   List<String> reversedIndividualWords = reversedWords.map((word) {
+//     // Reverse the characters in the word
+//     String reversedWord = word.split('').reversed.join('');
+//     return reversedWord;
+//   }).toList();
 
-  // Join the reversed words back together with spaces
-  String reversedString = reversedIndividualWords.join(' ');
+//   // Join the reversed words back together with spaces
+//   String reversedString = reversedIndividualWords.join(' ');
 
-  return reversedString;
-}
+//   return reversedString;
+// }

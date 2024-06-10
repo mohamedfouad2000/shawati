@@ -191,7 +191,11 @@ class _LangPageViewBodyState extends State<LangPageViewBody> {
           if (widget.fromLogin)
             defaultButton(
                 fun: () {
-                  NavegatorPush(context, const EnableLocation());
+                  NavegatorPush(
+                      context,
+                      const EnableLocation(
+                        fromLogin: false,
+                      ));
                 },
                 textWidget: Text(
                   'Select',

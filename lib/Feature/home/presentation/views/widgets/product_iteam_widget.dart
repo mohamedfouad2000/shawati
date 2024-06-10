@@ -60,12 +60,13 @@ class ProductItem extends StatelessWidget {
                             state.model.data?.services?[index].place ?? '',
                         image: state.model.data?.services?[index].image ?? '',
                         subTitlearab:
-                            state.model.data?.services?[index].place ?? '',
+                            state.model.data?.services?[index].placeAr ?? '',
                         titlearab:
                             state.model.data?.services?[index].nameAr ?? '',
-                        money: state.model.data?.services?[index].price
+                        money: state.model.data?.services?[index].regularPrice
                                 .toString() ??
-                            ''),
+                            '',
+                        gallary: state.model.data?.services?[index].gallery),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {

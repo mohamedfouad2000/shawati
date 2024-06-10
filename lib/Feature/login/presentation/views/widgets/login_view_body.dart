@@ -1,4 +1,4 @@
-import 'package:country_picker/country_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -9,7 +9,7 @@ import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/forget%20password/presentation/views/forget_password_view.dart';
-import 'package:shawati/Feature/home/presentation/views/home_view.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
 import 'package:shawati/Feature/location/presentation/views/enable_location_view.dart';
 import 'package:shawati/Feature/login/data/repo/login_repo_imp.dart';
 import 'package:shawati/Feature/login/presentation/manager/Login/login_cubit.dart';
@@ -18,6 +18,7 @@ import 'package:shawati/Feature/login/presentation/views/widgets/signup_here.dar
 import 'package:shawati/Feature/splash/presentation/views/widgets/splach_image_logo.dart';
 import 'package:shawati/Feature/splash/presentation/views/widgets/tqnia_logo.dart';
 import 'package:shawati/generated/l10n.dart';
+import 'package:intl_phone_field/countries.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody(
@@ -31,7 +32,7 @@ class LoginViewBody extends StatefulWidget {
 }
 
 class _LoginViewBodyState extends State<LoginViewBody> {
-  String code = '+20';
+  String code = '';
   String eroorMsq = '';
   // String country = 'Saudi Arabia';
   bool obscureText = true;
@@ -60,13 +61,22 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       if (state.model.data?.token != null) {
                         TOKEN = state.model.data?.token ?? '';
                         if (state.model.data?.token != null) {
-                          if (isChecked) {
-                            CacheHelper.saveData(key: 'Token', value: TOKEN)
-                                .then((value) =>
-                                    {Nav(context, const EnableLocation())});
-                          } else {
-                            Nav(context, const EnableLocation());
-                          }
+                          // if (isChecked) {
+                          CacheHelper.saveData(key: 'Token', value: TOKEN)
+                              .then((value) => {
+                                    Nav(
+                                        context,
+                                        const EnableLocation(
+                                          fromLogin: true,
+                                        ))
+                                  });
+                          // } else {
+                          // Nav(
+                          // context,
+                          // const EnableLocation(
+                          // fromLogin: true,
+                          // ));
+                          // }
                           // TOKEN = state.model.data?.token ?? '';
 
                           // CacheHelper.saveData(key: 'Token', value: TOKEN).then(
@@ -77,7 +87,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     } else if (state is LoginFailed) {
                       state.msg.toString() == 'Login Successfully'
                           ? showToast(
-                              msq: 'This Account Is Provider Canot Login Here')
+                              msq: LocalizationCubit.get(context).isArabic()
+                                  ? S.of(context).oppsMessage
+                                  : 'This Account Is Provider Canot Login Here')
                           : showToast(msq: state.msg.toString());
                     }
                   },
@@ -176,7 +188,17 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                           IntlPhoneField(
                             // disableLengthCheck: true,
 
-                            initialCountryCode: 'SA',
+                            invalidNumberMessage: S.of(context).phone_eroor,
+
+                            languageCode:
+                                LocalizationCubit.get(context).isArabic()
+                                    ? 'ar'
+                                    : 'en',
+                            initialCountryCode: 'EG',
+                            countries: countries
+                                .where(
+                                    (element) => ['EG'].contains(element.code))
+                                .toList(),
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
 
@@ -188,8 +210,10 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                                   widget.phoneController.text = '';
                                 });
                               }
-                              code = phone.countryCode;
-                              print("$code${widget.phoneController.text}");
+                              code = phone.countryCode.substring(1);
+                              // code = phone.countryCode;
+                              print(
+                                  "data is $code${widget.phoneController.text}");
 
                               print(phone.completeNumber); //get complete number
                               print(phone.countryCode); // get country code only
@@ -321,14 +345,18 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                             ),
 
                           defaultButton(
-                              fun: () {
+                              fun: () async {
                                 formKey.currentState!.validate();
                                 if (formKey.currentState!.validate()) {
                                   if (widget.phoneController.text != '' &&
                                       widget.phoneController.text != '') {
+                                    String? x = await FirebaseMessaging.instance
+                                        .getToken();
+
                                     BlocProvider.of<LoginCubit>(context).loginUser(
+                                        fcmToken: x ?? '',
                                         phone:
-                                            '${code.substring(1)}${widget.phoneController.text}',
+                                            '$code${widget.phoneController.text}',
                                         password:
                                             widget.passwordController.text);
                                   } else {
@@ -381,17 +409,17 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                                 S.of(context).Rememberme,
                                 style: StylesData.font12,
                               ),
-                              const Spacer(),
-                              InkWell(
-                                onTap: () {
-                                  NavegatorPush(
-                                      context, const ForgetPasswordView());
-                                },
-                                child: Text(
-                                  S.of(context).ForgotYourPassword,
-                                  style: StylesData.font10,
-                                ),
-                              ),
+                              // const Spacer(),
+                              // InkWell(
+                              //   onTap: () {
+                              //     NavegatorPush(
+                              //         context, const ForgetPasswordView());
+                              //   },
+                              //   child: Text(
+                              //     S.of(context).ForgotYourPassword,
+                              //     style: StylesData.font10,
+                              //   ),
+                              // ),
                             ],
                           ),
                           // const SizedBox(

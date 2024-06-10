@@ -59,7 +59,7 @@ class HomeSearchWidget extends StatelessWidget {
                       padding: EdgeInsets.all(12.0),
                       child: ImageIcon(
                         AssetImage(
-                          AssetsData.searchicon,
+                          AssetsData.searchiconBar,
                         ),
                         size: 6,
                         color: Colors.grey,

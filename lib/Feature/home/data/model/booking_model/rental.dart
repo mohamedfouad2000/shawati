@@ -18,32 +18,33 @@ class Rental {
   dynamic description;
   String? lng;
   String? lat;
+  String? attachment;
   DateTime? createdAt;
   DateTime? updatedAt;
   Service? service;
 
-  Rental({
-    this.id,
-    this.serviceId,
-    this.brandId,
-    this.couponId,
-    this.amount,
-    this.insurance,
-    this.totalAmount,
-    this.taxes,
-    this.customerId,
-    this.providerId,
-    this.bookingStatusId,
-    this.startAt,
-    this.endAt,
-    this.paymentStatusId,
-    this.description,
-    this.lng,
-    this.lat,
-    this.createdAt,
-    this.updatedAt,
-    this.service,
-  });
+  Rental(
+      {this.id,
+      this.serviceId,
+      this.brandId,
+      this.couponId,
+      this.amount,
+      this.insurance,
+      this.totalAmount,
+      this.taxes,
+      this.customerId,
+      this.providerId,
+      this.bookingStatusId,
+      this.startAt,
+      this.endAt,
+      this.paymentStatusId,
+      this.description,
+      this.lng,
+      this.lat,
+      this.createdAt,
+      this.updatedAt,
+      this.service,
+      this.attachment});
 
   factory Rental.fromJson(Map<String, dynamic> json) => Rental(
         id: json['id'] as int?,
@@ -63,6 +64,7 @@ class Rental {
         description: json['description'] as dynamic,
         lng: json['lng'] as String?,
         lat: json['lat'] as String?,
+        attachment: json['attachment'] as String?,
         createdAt: json['created_at'] == null
             ? null
             : DateTime.parse(json['created_at'] as String),
@@ -92,6 +94,7 @@ class Rental {
         'description': description,
         'lng': lng,
         'lat': lat,
+        'attachment': attachment,
         'created_at': createdAt?.toIso8601String(),
         'updated_at': updatedAt?.toIso8601String(),
         'service': service?.toJson(),

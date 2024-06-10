@@ -9,6 +9,7 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this.repo) : super(HomeInitial());
   final HomeRepo repo;
   HomeModel? model;
+  int? categoryId = -1;
 
   Future<void> getHomeData(
       {required int cateId, required String text, required context}) async {

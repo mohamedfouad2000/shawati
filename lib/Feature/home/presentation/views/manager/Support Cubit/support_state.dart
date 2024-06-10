@@ -16,3 +16,15 @@ final class SupportError extends SupportState {
   final String msg;
   SupportError({required this.msg});
 }
+
+final class GetSettingLoading extends SupportState {}
+
+final class GetSettingSucc extends SupportState {
+  final AdminModel msq;
+  GetSettingSucc({required this.msq});
+}
+
+final class GetSettingError extends SupportState {
+  final String msg;
+  GetSettingError({required this.msg});
+}

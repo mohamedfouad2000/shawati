@@ -11,6 +11,7 @@ import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/s
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_state.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/product_details_screen_body.dart';
+import 'package:shawati/generated/l10n.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen(
@@ -41,7 +42,11 @@ class ProductDetailsScreen extends StatelessWidget {
                     color: Colors.red);
               }
             } else if (state is AddOrRemoveFavError) {
-              showToast(msq: state.msg, color: Colors.red);
+              showToast(
+                  msq: LocalizationCubit.get(context).isArabic()
+                      ? S.of(context).oppsMessage
+                      : state.msg,
+                  color: Colors.red);
             }
           },
           builder: (context, state) {

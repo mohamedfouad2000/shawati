@@ -70,10 +70,10 @@ class S {
     );
   }
 
-  /// `SAR`
+  /// `ُEGP`
   String get SAR {
     return Intl.message(
-      'SAR',
+      'ُEGP',
       name: 'SAR',
       desc: '',
       args: [],
@@ -140,10 +140,10 @@ class S {
     );
   }
 
-  /// `Recently search`
+  /// `search results`
   String get Recentlysearch {
     return Intl.message(
-      'Recently search',
+      'search results',
       name: 'Recentlysearch',
       desc: '',
       args: [],
@@ -215,6 +215,46 @@ class S {
     return Intl.message(
       'My booking',
       name: 'MyBooking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `paid`
+  String get paid {
+    return Intl.message(
+      'paid',
+      name: 'paid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `unpaid`
+  String get unpaid {
+    return Intl.message(
+      'unpaid',
+      name: 'unpaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid Days`
+  String get InvalidDays {
+    return Intl.message(
+      'Invalid Days',
+      name: 'InvalidDays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Location`
+  String get Location {
+    return Intl.message(
+      'Location',
+      name: 'Location',
       desc: '',
       args: [],
     );
@@ -380,20 +420,20 @@ class S {
     );
   }
 
-  /// `Terms of Service`
+  /// `If you want To Delete Your Account `
   String get profile4 {
     return Intl.message(
-      'Terms of Service',
+      'If you want To Delete Your Account ',
       name: 'profile4',
       desc: '',
       args: [],
     );
   }
 
-  /// ` apply `
+  /// `Click Here`
   String get profile5 {
     return Intl.message(
-      ' apply ',
+      'Click Here',
       name: 'profile5',
       desc: '',
       args: [],
@@ -872,10 +912,10 @@ class S {
     );
   }
 
-  /// `ApplayFilter`
+  /// `Apply filter`
   String get ApplayFilter {
     return Intl.message(
-      'ApplayFilter',
+      'Apply filter',
       name: 'ApplayFilter',
       desc: '',
       args: [],
@@ -922,20 +962,40 @@ class S {
     );
   }
 
-  /// `Clock In`
+  /// `Go To This Location`
+  String get GoToThisLocation {
+    return Intl.message(
+      'Go To This Location',
+      name: 'GoToThisLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refunds`
+  String get Refunds {
+    return Intl.message(
+      'Refunds',
+      name: 'Refunds',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `available from`
   String get ClockIn {
     return Intl.message(
-      'Clock In',
+      'available from',
       name: 'ClockIn',
       desc: '',
       args: [],
     );
   }
 
-  /// `Clock In`
+  /// `available to`
   String get ClockOut {
     return Intl.message(
-      'Clock In',
+      'available to',
       name: 'ClockOut',
       desc: '',
       args: [],
@@ -952,10 +1012,10 @@ class S {
     );
   }
 
-  /// `Rating Dialog`
+  /// `Rating`
   String get RatingDialog {
     return Intl.message(
-      'Rating Dialog',
+      'Rating',
       name: 'RatingDialog',
       desc: '',
       args: [],
@@ -1187,6 +1247,346 @@ class S {
     return Intl.message(
       'Loading ...',
       name: 'Loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Service`
+  String get Addservice {
+    return Intl.message(
+      'Add Service',
+      name: 'Addservice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `add your service now!`
+  String get add_your_service_now {
+    return Intl.message(
+      'add your service now!',
+      name: 'add_your_service_now',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Property Name`
+  String get Property_Name {
+    return Intl.message(
+      'Property Name',
+      name: 'Property_Name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Property Name With Arabic`
+  String get Property_Name_With_Arabic {
+    return Intl.message(
+      'Property Name With Arabic',
+      name: 'Property_Name_With_Arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Category`
+  String get Category {
+    return Intl.message(
+      'Category',
+      name: 'Category',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Place`
+  String get Place {
+    return Intl.message(
+      'Place',
+      name: 'Place',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Place With Arabic`
+  String get Place_With_Arabic {
+    return Intl.message(
+      'Place With Arabic',
+      name: 'Place_With_Arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Description`
+  String get Description {
+    return Intl.message(
+      'Description',
+      name: 'Description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Description Arabic`
+  String get Description_Arabic {
+    return Intl.message(
+      'Description Arabic',
+      name: 'Description_Arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please fill all the fields`
+  String get error_Msq_add_service {
+    return Intl.message(
+      'Please fill all the fields',
+      name: 'error_Msq_add_service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Title`
+  String get selectsubject {
+    return Intl.message(
+      'Title',
+      name: 'selectsubject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Event Days`
+  String get AddEventDays {
+    return Intl.message(
+      'Add Event Days',
+      name: 'AddEventDays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Feature`
+  String get addFeature {
+    return Intl.message(
+      'Add Feature',
+      name: 'addFeature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Event Days`
+  String get SelectEventDays {
+    return Intl.message(
+      'Select Event Days',
+      name: 'SelectEventDays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Event Day`
+  String get AddEventDay {
+    return Intl.message(
+      'Add Event Day',
+      name: 'AddEventDay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Event Days`
+  String get eventdays {
+    return Intl.message(
+      'Event Days',
+      name: 'eventdays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Successfull`
+  String get Successfull {
+    return Intl.message(
+      'Successfull',
+      name: 'Successfull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Opps! Something went wrong`
+  String get oppsMessage {
+    return Intl.message(
+      'Opps! Something went wrong',
+      name: 'oppsMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount`
+  String get amount {
+    return Intl.message(
+      'Amount',
+      name: 'amount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select payment method and upload payment screen`
+  String get eroor500 {
+    return Intl.message(
+      'Please select payment method and upload payment screen',
+      name: 'eroor500',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The password field must be at least 8 characters`
+  String get eroor507 {
+    return Intl.message(
+      'The password field must be at least 8 characters',
+      name: 'eroor507',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Normal Days`
+  String get normaldays {
+    return Intl.message(
+      'Normal Days',
+      name: 'normaldays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `pending`
+  String get pending {
+    return Intl.message(
+      'pending',
+      name: 'pending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `in progress`
+  String get inprogress {
+    return Intl.message(
+      'in progress',
+      name: 'inprogress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approved`
+  String get Approved {
+    return Intl.message(
+      'Approved',
+      name: 'Approved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejected`
+  String get Rejected {
+    return Intl.message(
+      'Rejected',
+      name: 'Rejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `change Image`
+  String get changeImage {
+    return Intl.message(
+      'change Image',
+      name: 'changeImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Available Days`
+  String get AvailableDays {
+    return Intl.message(
+      'Available Days',
+      name: 'AvailableDays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Booking Details`
+  String get BookingDetails {
+    return Intl.message(
+      'Booking Details',
+      name: 'BookingDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last Payment`
+  String get lastPayment {
+    return Intl.message(
+      'Last Payment',
+      name: 'lastPayment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get All {
+    return Intl.message(
+      'All',
+      name: 'All',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `copon`
+  String get coupon {
+    return Intl.message(
+      'copon',
+      name: 'coupon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Privacy Policy`
+  String get Privacypolicy {
+    return Intl.message(
+      'Privacy Policy',
+      name: 'Privacypolicy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total After Copon`
+  String get TotalAfterCopon {
+    return Intl.message(
+      'Total After Copon',
+      name: 'TotalAfterCopon',
       desc: '',
       args: [],
     );

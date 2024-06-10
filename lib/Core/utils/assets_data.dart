@@ -24,6 +24,9 @@ class AssetsData {
   static const c4 = 'assets/images/Group (1).png';
   static const homeicon = 'assets/images/homeicon.png';
   static const searchicon = 'assets/images/search-normal.png';
+  static const searchiconBar = 'assets/images/seatchbar.png';
+  static const pdf = 'assets/images/pdf.png';
+  static const coupon = 'assets/images/coupon.png';
   static const bookingicon = 'assets/images/clipboard-text.png';
   static const menuicon = 'assets/images/category-2.png';
   static const save = 'assets/images/save.png';

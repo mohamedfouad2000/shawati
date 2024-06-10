@@ -7,6 +7,7 @@ import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Core/widgets/empty_wid.dart';
 import 'package:shawati/Core/widgets/faliure_wid.dart';
 import 'package:shawati/Feature/home/data/model/booking_model/rental.dart';
+import 'package:shawati/Feature/home/data/model/home_model/service.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Booking%20cubit/booking_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Booking%20cubit/booking_state.dart';
@@ -24,7 +25,7 @@ class BookingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.only(left: 16.0, right: 16, top: 32, bottom: 16),
+          const EdgeInsets.only(left: 16.0, right: 16, top: 16, bottom: 16),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,8 +41,11 @@ class BookingScreen extends StatelessWidget {
               child: BlocConsumer<BookingCubit, BookingState>(
                 listener: (context, state) {
                   if (state is BookingError) {
-                    showToast(msq: "Opps :Please Login Again ");
-                    Nav(context, const LoginView());
+                    showToast(
+                        msq: LocalizationCubit.get(context).isArabic()
+                            ? S.of(context).oppsMessage
+                            : "Opps :Please Login Again ");
+                    // Nav(context, const LoginView());
                   }
                 },
                 builder: (context, state) {
@@ -69,37 +73,79 @@ class BookingScreen extends StatelessWidget {
                               return Stack(
                                 alignment: Alignment.bottomRight,
                                 children: [
-                                  ProductData(
-                                      id: state.Model.data?.rental?[index].service?.id ??
-                                          0,
-                                      title: state.Model.data?.upcoming?[index]
-                                              .service?.name ??
-                                          '',
-                                      subTitlearab: state
-                                              .Model
-                                              .data
-                                              ?.upcoming?[index]
-                                              .service
-                                              ?.place ??
-                                          '',
-                                      titlearab: state
-                                              .Model
-                                              .data
-                                              ?.upcoming?[index]
-                                              .service
-                                              ?.nameAr ??
-                                          '',
-                                      subTitle: state
-                                              .Model
-                                              .data
-                                              ?.upcoming?[index]
-                                              .service
-                                              ?.place ??
-                                          '',
-                                      image: state.Model.data?.upcoming?[index]
-                                              .service?.image ??
-                                          '',
-                                      money: state.Model.data?.upcoming?[index].service?.price.toString() ?? ''),
+                                  InkWell(
+                                    onTap: () {
+                                      NavegatorPush(
+                                          context,
+                                          BookingDetailsScreen(
+                                            paymentStatusId: state
+                                                    .Model
+                                                    .data!
+                                                    .upcoming![index]
+                                                    .paymentStatusId ??
+                                                0,
+                                            id: state.Model.data!
+                                                    .upcoming![index].id ??
+                                                0,
+                                            endTime: state.Model.data!
+                                                    .upcoming![index].endAt ??
+                                                '',
+                                            startTime: state.Model.data!
+                                                    .upcoming![index].startAt ??
+                                                '',
+                                            bookingid: state.Model.data!
+                                                    .upcoming![index].id ??
+                                                0,
+                                            bookingStatusId: state
+                                                .Model
+                                                .data!
+                                                .upcoming![index]
+                                                .bookingStatusId,
+                                            attachment: state.Model.data!
+                                                .upcoming![index].attachment,
+                                            model: state.Model.data!
+                                                .upcoming![index].service!,
+                                          ));
+                                    },
+                                    child: ProductData(
+                                        paymentStatusId: state
+                                                .Model
+                                                .data
+                                                ?.upcoming?[index]
+                                                .paymentStatusId ??
+                                            0,
+                                        gallary: state.Model.data
+                                            ?.upcoming?[index].service?.gallery,
+                                        frombooking: true,
+                                        bookingstatus: state.Model.data
+                                            ?.upcoming?[index].bookingStatusId,
+                                        id: state.Model.data?.upcoming?[index].service?.id ??
+                                            0,
+                                        title: state
+                                                .Model
+                                                .data
+                                                ?.upcoming?[index]
+                                                .service
+                                                ?.name ??
+                                            '',
+                                        subTitlearab: state
+                                                .Model
+                                                .data
+                                                ?.upcoming?[index]
+                                                .service
+                                                ?.placeAr ??
+                                            '',
+                                        titlearab: state
+                                                .Model
+                                                .data
+                                                ?.upcoming?[index]
+                                                .service
+                                                ?.nameAr ??
+                                            '',
+                                        subTitle: state.Model.data?.upcoming?[index].service?.place ?? '',
+                                        image: state.Model.data?.upcoming?[index].service?.image ?? '',
+                                        money: state.Model.data?.upcoming?[index].service?.regularPrice.toString() ?? ''),
+                                  ),
                                   Positioned(
                                     right: LocalizationCubit.get(context)
                                             .isArabic()
@@ -119,6 +165,46 @@ class BookingScreen extends StatelessWidget {
                                             NavegatorPush(
                                                 context,
                                                 BookingDetailsScreen(
+                                                  paymentStatusId: state
+                                                          .Model
+                                                          .data!
+                                                          .upcoming![index]
+                                                          .paymentStatusId ??
+                                                      0,
+                                                  id: state
+                                                          .Model
+                                                          .data!
+                                                          .upcoming![index]
+                                                          .id ??
+                                                      0,
+                                                  endTime: state
+                                                          .Model
+                                                          .data!
+                                                          .upcoming![index]
+                                                          .endAt ??
+                                                      '',
+                                                  startTime: state
+                                                          .Model
+                                                          .data!
+                                                          .upcoming![index]
+                                                          .startAt ??
+                                                      '',
+                                                  bookingid: state
+                                                          .Model
+                                                          .data!
+                                                          .upcoming![index]
+                                                          .id ??
+                                                      0,
+                                                  bookingStatusId: state
+                                                      .Model
+                                                      .data!
+                                                      .upcoming![index]
+                                                      .bookingStatusId,
+                                                  attachment: state
+                                                      .Model
+                                                      .data!
+                                                      .upcoming![index]
+                                                      .attachment,
                                                   model: state
                                                       .Model
                                                       .data!
@@ -165,7 +251,7 @@ class BookingScreen extends StatelessWidget {
                           ),
 
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         if (state.Model.data!.rental!.isNotEmpty)
                           Text(
@@ -187,33 +273,70 @@ class BookingScreen extends StatelessWidget {
                                 alignment: Alignment.bottomRight,
                                 children: [
                                   InkWell(
-                                    onTap: (){
+                                    onTap: () {
                                       NavegatorPush(
-                                                context,
-                                                BookingDetailsScreen(
-                                                  model: state.Model.data!
-                                                      .rental![index].service!,
-                                                ));
+                                          context,
+                                          BookingDetailsScreen(
+                                            paymentStatusId: state
+                                                    .Model
+                                                    .data!
+                                                    .rental![index]
+                                                    .paymentStatusId ??
+                                                0,
+                                            id: state.Model.data!.rental![index]
+                                                    .id ??
+                                                0,
+                                            endTime: state.Model.data!
+                                                    .rental![index].endAt ??
+                                                '',
+                                            startTime: state.Model.data!
+                                                    .rental![index].startAt ??
+                                                '',
+                                            bookingid: state.Model.data!
+                                                    .rental![index].id ??
+                                                0,
+                                            bookingStatusId: state.Model.data!
+                                                .rental![index].bookingStatusId,
+                                            model: state.Model.data!
+                                                .rental![index].service!,
+                                            attachment: state.Model.data!
+                                                .rental![index].attachment,
+                                          ));
                                     },
                                     child: ProductData(
+                                        paymentStatusId: state
+                                                .Model
+                                                .data
+                                                ?.rental?[index]
+                                                .paymentStatusId ??
+                                            0,
+                                        gallary: state.Model.data
+                                            ?.rental?[index].service?.gallery,
+                                        bookingstatus: state.Model.data
+                                            ?.rental?[index].bookingStatusId,
+                                        frombooking: true,
                                         id: state.Model.data?.rental?[index].service?.id ??
                                             0,
-                                        subTitlearab: state.Model.data
-                                                ?.rental?[index].service?.place ??
+                                        subTitlearab: state
+                                                .Model
+                                                .data
+                                                ?.rental?[index]
+                                                .service
+                                                ?.placeAr ??
                                             '',
-                                        titlearab: state.Model.data
-                                                ?.rental?[index].service?.name ??
+                                        titlearab: state
+                                                .Model
+                                                .data
+                                                ?.rental?[index]
+                                                .service
+                                                ?.nameAr ??
                                             '',
                                         title: state.Model.data?.rental?[index]
                                                 .service?.name ??
                                             '',
-                                        subTitle: state.Model.data?.rental?[index]
-                                                .service?.place ??
-                                            '',
-                                        image: state.Model.data?.rental?[index]
-                                                .service?.image ??
-                                            '',
-                                        money: state.Model.data?.rental?[index].service?.price.toString() ?? ''),
+                                        subTitle: state.Model.data?.rental?[index].service?.place ?? '',
+                                        image: state.Model.data?.rental?[index].service?.image ?? '',
+                                        money: state.Model.data?.rental?[index].service?.regularPrice.toString() ?? ''),
                                   ),
                                   Positioned(
                                     right: LocalizationCubit.get(context)
@@ -234,8 +357,41 @@ class BookingScreen extends StatelessWidget {
                                             NavegatorPush(
                                                 context,
                                                 BookingDetailsScreen(
-                                                  model: state.Model.data!
-                                                      .rental![index].service!,
+                                                  paymentStatusId: state
+                                                          .Model
+                                                          .data!
+                                                          .rental![index]
+                                                          .paymentStatusId ??
+                                                      0,
+                                                  id: state.Model.data!
+                                                          .rental![index].id ??
+                                                      0,
+                                                  endTime: state
+                                                          .Model
+                                                          .data!
+                                                          .rental![index]
+                                                          .endAt ??
+                                                      '',
+                                                  startTime: state
+                                                          .Model
+                                                          .data!
+                                                          .rental![index]
+                                                          .startAt ??
+                                                      '',
+                                                  bookingid: state.Model.data!
+                                                          .rental![index].id ??
+                                                      0,
+                                                  bookingStatusId: state
+                                                      .Model
+                                                      .data!
+                                                      .rental![index]
+                                                      .bookingStatusId,
+                                                  model: state
+                                                          .Model
+                                                          .data
+                                                          ?.rental?[index]
+                                                          .service ??
+                                                      Service(),
                                                 ));
                                           },
                                           child: Padding(
@@ -257,7 +413,7 @@ class BookingScreen extends StatelessWidget {
                                           state.Model.data?.rental?[index]
                                                   .service?.createdAt
                                                   .toString()
-                                                  .substring(0, 16) ??
+                                                  .substring(0, 10) ??
                                               '',
                                           style: StylesData.font12,
                                         )

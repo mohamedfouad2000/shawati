@@ -8,8 +8,24 @@ import 'package:shawati/Feature/home/presentation/views/widgets/booking_details_
 import 'package:shawati/generated/l10n.dart';
 
 class BookingDetailsScreen extends StatelessWidget {
-  const BookingDetailsScreen({super.key, required this.model});
+  const BookingDetailsScreen(
+      {super.key,
+      required this.model,
+      this.attachment,
+      required this.bookingStatusId,
+      required this.bookingid,
+      required this.startTime,
+      required this.endTime,
+      required this.id,
+      required this.paymentStatusId});
   final Service model;
+  final String? attachment;
+  final int bookingStatusId;
+  final int bookingid;
+  final String startTime;
+  final String endTime;
+  final int id;
+  final int paymentStatusId;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +33,7 @@ class BookingDetailsScreen extends StatelessWidget {
       appBar: customAppBar(context,
           title: InkWell(
             onTap: () {
+              print('widget model lat $startTime $endTime');
               showRatingDialog(context: context, id: model.id ?? 0);
             },
             child: Container(
@@ -31,8 +48,14 @@ class BookingDetailsScreen extends StatelessWidget {
             ),
           )),
       body: BookingDetailsScreenBody(
-        model: model,
-      ),
+          endTime: endTime,
+          paymentStatusId: paymentStatusId,
+          id: id,
+          startTime: startTime,
+          model: model,
+          attachment: attachment,
+          bookingid: bookingid,
+          bookingStatusId: bookingStatusId),
     );
   }
 }

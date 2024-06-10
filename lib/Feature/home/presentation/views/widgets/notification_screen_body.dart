@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Core/widgets/empty_wid.dart';
 import 'package:shawati/Core/widgets/faliure_wid.dart';
+import 'package:shawati/Feature/home/data/model/notification_model/datum.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Notification/notification_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/notification_item.dart';
@@ -43,21 +43,22 @@ class NotificationScreenBody extends StatelessWidget {
                 Expanded(
                   child: Builder(builder: (context) {
                     if (state is NotificationSucc) {
-                      if (state.model.data?.notifications?.isEmpty ?? true) {
+                      if (state.model.data!.isEmpty) {
                         return const Center(
                           child: EmptyWidget(),
                         );
                       }
                       return ListView.separated(
                         itemBuilder: (BuildContext context, int index) {
-                          return const NotificationItem();
+                          return NotificationItem(
+                              data: state.model.data![index]);
                         },
                         separatorBuilder: (BuildContext context, int index) {
                           return const SizedBox(
                             height: 15,
                           );
                         },
-                        itemCount: state.model.data?.notifications?.length ?? 0,
+                        itemCount: state.model.data?.length ?? 0,
                       );
                     } else if (state is NotificationError) {
                       return const Center(child: FailureWidget());

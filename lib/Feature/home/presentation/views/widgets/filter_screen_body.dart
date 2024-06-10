@@ -75,10 +75,10 @@ class _FilterScreenBodyState extends State<FilterScreenBody> {
                 const SizedBox(
                   height: 25,
                 ),
-                const PriceDuration(),
-                const SizedBox(
-                  height: 25,
-                ),
+                // const PriceDuration(),
+                // const SizedBox(
+                //   height: 25,
+                // ),
                 AreaFIltter(location: widget.location),
                 const SizedBox(
                   height: 25,

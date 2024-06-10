@@ -24,21 +24,20 @@ class FavScreenList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: BlocProvider(
-        create: (context) =>
-            FavCubit(HomeRepoImpl())..getFavList(context: context),
-        child: BlocConsumer<FavCubit, FavState>(
-          listener: (context, state) {
-            // TODO: implement listener
-          },
-          builder: (context, state) {
-            if (state is FavSuccess) {
-              if (state.model.data!.favorites == null) {
-                return const Expanded(child: Center(child: EmptyWidget()));
-              }
-              return GridView.count(
-                  // shrinkWrap: true,
+    return BlocProvider(
+      create: (context) =>
+          FavCubit(HomeRepoImpl())..getFavList(context: context),
+      child: BlocConsumer<FavCubit, FavState>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          if (state is FavSuccess) {
+            if (state.model.data!.favorites!.isEmpty) {
+              return const Center(child: EmptyWidget());
+            }
+            return Expanded(
+              child: GridView.count(
                   physics: const BouncingScrollPhysics(),
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
@@ -53,18 +52,18 @@ class FavScreenList extends StatelessWidget {
                               model:
                                   state.model.data!.favorites![index].service,
                             ))
-                  ]);
-            } else if (state is FavFailed) {
-              return Center(child: Text(state.message));
-            } else {
-              return const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          },
-        ),
+                  ]),
+            );
+          } else if (state is FavFailed) {
+            return Center(child: Text(state.message));
+          } else {
+            return const Expanded(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -169,7 +168,9 @@ Widget item(context,
                   width: 4,
                 ),
                 Text(
-                  '${model?.place}',
+                  LocalizationCubit.get(context).isArabic()
+                      ? '${model?.placeAr}'
+                      : '${model?.place}',
                   style: StylesData.font12
                       .copyWith(color: Colors.black, fontSize: 6),
                 )
@@ -187,13 +188,15 @@ Widget item(context,
                   width: 4,
                 ),
                 Text(
-                  "${S.of(context).SAR} ${model?.price} ",
+                  LocalizationCubit.get(context).isArabic()
+                      ? " ${model?.regularPrice} ${S.of(context).SAR}  "
+                      : "${S.of(context).SAR} ${model?.regularPrice} ",
                   style: StylesData.font8.copyWith(
                     color: ConstColor.kMainColor,
                   ),
                 ),
                 Text(
-                  "/${S.of(context).day}",
+                  "/ ${S.of(context).day}",
                   style: StylesData.font7.copyWith(
                       color: Colors.black, fontWeight: FontWeight.w400),
                 )

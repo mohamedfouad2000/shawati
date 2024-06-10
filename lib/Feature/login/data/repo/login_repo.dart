@@ -4,5 +4,9 @@ import 'package:shawati/Feature/register/data/models/register_model/register_mod
 
 abstract class LoginRepo {
   Future<Either<Failure, RegisterModel>> loginUser(
-      {required String phone, required String password});
+      {required String phone,
+      required String password,
+      required String lang,
+      required String fcmToken});
+  Future<Either<Failure, String>> logOut({required String fcmToken});
 }

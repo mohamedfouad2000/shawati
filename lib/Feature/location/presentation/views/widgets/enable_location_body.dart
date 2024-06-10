@@ -8,6 +8,7 @@ import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/home_view.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Location%20cubit/location_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/set_location_screen.dart';
 
 import 'package:shawati/Feature/splash/presentation/views/widgets/tqnia_logo.dart';
@@ -23,14 +24,20 @@ class EnableLocationBody extends StatelessWidget {
       child: BlocConsumer<LocationCubit, LocationState>(
         listener: (context, state) {
           if (state is LocationSucc) {
-            showToast(msq: state.msq);
+            showToast(
+                msq: LocalizationCubit.get(context).isArabic()
+                    ? S.of(context).Successfull
+                    : state.msq);
             Nav(
                 context,
                 const HomeView(
                   currentidex: 0,
                 ));
           } else if (state is LocationError) {
-            showToast(msq: state.msg);
+            showToast(
+                msq: LocalizationCubit.get(context).isArabic()
+                    ? S.of(context).oppsMessage
+                    : state.msg);
           }
         },
         builder: (context, state) {
@@ -102,7 +109,7 @@ class EnableLocationBody extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    NavegatorPush(
+                    Nav(
                         context,
                         const HomeView(
                           currentidex: 0,

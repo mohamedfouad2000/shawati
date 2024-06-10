@@ -191,13 +191,15 @@ Widget item(context,
                       width: 4,
                     ),
                     Text(
-                      "${S.of(context).SAR} ${model.price} ",
+                      LocalizationCubit.get(context).isArabic()
+                          ? "${model.regularPrice} ${S.of(context).SAR}  "
+                          : "${S.of(context).SAR} ${model.regularPrice} ",
                       style: StylesData.font8.copyWith(
                         color: ConstColor.kMainColor,
                       ),
                     ),
                     Text(
-                      "/${S.of(context).day}",
+                      "/ ${S.of(context).day}",
                       style: StylesData.font7.copyWith(
                           color: Colors.black, fontWeight: FontWeight.w400),
                     )

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shawati/Core/constans/const.dart';
@@ -9,6 +10,9 @@ import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/components.dart';
 
 import 'package:shawati/Core/utils/styles.dart';
+import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/terms%20And%20Privacy%20Cubit/terms_and_privacy_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/terms_screen.dart';
 import 'package:shawati/Feature/location/presentation/views/enable_location_view.dart';
 import 'package:shawati/Feature/register/data/repo/register_repo_imple.dart';
@@ -19,6 +23,7 @@ import 'package:shawati/Feature/register/presentation/views/widgets/login_here.d
 import 'package:shawati/Feature/splash/presentation/views/widgets/splach_image_logo.dart';
 import 'package:shawati/Feature/splash/presentation/views/widgets/tqnia_logo.dart';
 import 'package:shawati/generated/l10n.dart';
+import 'package:intl_phone_field/countries.dart';
 
 class RegisterViewBody extends StatefulWidget {
   const RegisterViewBody(
@@ -40,7 +45,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
   String eroorMsq = '';
   bool isPhoneValidated = false;
 
-  String code = '+20';
+  String code = '';
   bool isChecked = false;
   String country = 'Saudi Arabia';
   bool obscureTextconpass = true;
@@ -64,8 +69,13 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
             if (state.model.data?.token != null) {
               TOKEN = state.model.data?.token ?? '';
 
-              CacheHelper.saveData(key: 'Token', value: TOKEN)
-                  .then((value) => {Nav(context, const EnableLocation())});
+              CacheHelper.saveData(key: 'Token', value: TOKEN).then((value) => {
+                    Nav(
+                        context,
+                        const EnableLocation(
+                          fromLogin: true,
+                        ))
+                  });
             }
           } else if (state is RegisterError) {
             showToast(msq: state.eroorMsq.toString());
@@ -187,9 +197,22 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                           //     )),
 
                           IntlPhoneField(
+                            invalidNumberMessage: S.of(context).phone_eroor,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
+                            initialCountryCode: 'EG',
+                            countries: countries
+                                .where(
+                                    (element) => ['EG'].contains(element.code))
+                                .toList(),
                             onChanged: (phone) {
+                              if (phone.number[0] == '0') {
+                                print("sha is ${phone.number[0]}");
+
+                                setState(() {
+                                  widget.phoneController.text = '';
+                                });
+                              }
                               print(phone.completeNumber);
                               code = phone.countryCode.substring(1);
                             },
@@ -240,7 +263,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                                 ),
                               ),
                             ),
-                            initialCountryCode: 'SA',
+                            // initialCountryCode: 'SA',
                             enabled: true,
                             focusNode: focusNode,
                             validator: (value) {
@@ -248,9 +271,9 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                               print(value.number.isEmpty);
                               print('llllll,,');
                               if (value.number.isEmpty) {
-                                return "must be not Empty";
+                                return S.of(context).phone_eroor;
                               } else if (value.number.length < 10) {
-                                return 'must not be less than 10 numbers';
+                                return S.of(context).phone_eroor;
                               }
                               print(value.number.length);
                               return null;
@@ -356,15 +379,43 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                                 S.of(context).Iacceptallthe,
                                 style: StylesData.font12,
                               ),
-                              InkWell(
-                                onTap: () {
-                                  NavegatorPush(context, const TermsScreen());
-                                },
-                                child: Text(
-                                  S.of(context).termsconditions,
-                                  style: StylesData.font12.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w800),
+                              BlocProvider(
+                                create: (context) =>
+                                    TermsAndPrivacyCubit(HomeRepoImpl())
+                                      ..getTermsAndPrivacy(),
+                                child: BlocConsumer<TermsAndPrivacyCubit,
+                                    TermsAndPrivacyState>(
+                                  listener: (context, state) {
+                                    // TODO: implement listener
+                                  },
+                                  builder: (context, state) {
+                                    if (state is GetTermsAndPrivacySucc) {
+                                      return InkWell(
+                                        onTap: () {
+                                          NavegatorPush(
+                                              context,
+                                              TermsScreen(
+                                                  termsText:
+                                                      state.model.data?.term ??
+                                                          '',
+                                                  termsTextAr: state
+                                                          .model.data?.termAr ??
+                                                      ''));
+                                        },
+                                        child: Text(
+                                          S.of(context).termsconditions,
+                                          style: StylesData.font12.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                      );
+                                    } else if (state
+                                        is GetTermsAndPrivacyError) {
+                                      return Text(state.msg);
+                                    } else {
+                                      return const Text('');
+                                    }
+                                  },
                                 ),
                               ),
                             ],
@@ -393,24 +444,37 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                               height: 20,
                             ),
                           defaultButton(
-                              fun: () {
+                              fun: () async {
                                 if (_formKey.currentState!.validate()) {
                                   if (widget.phoneController.text != '') {
                                     if (isChecked) {
                                       if (widget.passwordController.text ==
                                           widget
                                               .confirmpasswordController.text) {
-                                        BlocProvider.of<RegisterCubit>(context)
-                                            .registerUser(
-                                                name:
-                                                    widget.nameController.text,
-                                                phone:
-                                                    '$code${widget.phoneController.text}',
-                                                password: widget
-                                                    .passwordController.text,
-                                                confirmPassword: widget
-                                                    .confirmpasswordController
-                                                    .text);
+                                        if (widget.passwordController.text
+                                                .length >
+                                            7) {
+                                          String? x = await FirebaseMessaging
+                                              .instance
+                                              .getToken();
+                                          BlocProvider.of<RegisterCubit>(
+                                                  context)
+                                              .registerUser(
+                                                  fcmToken: x ?? '',
+                                                  name: widget
+                                                      .nameController.text,
+                                                  phone:
+                                                      '$code${widget.phoneController.text}',
+                                                  password: widget
+                                                      .passwordController.text,
+                                                  confirmPassword: widget
+                                                      .confirmpasswordController
+                                                      .text);
+                                        } else {
+                                          setState(() {
+                                            eroorMsq = S.of(context).eroor507;
+                                          });
+                                        }
                                         //code here
                                       } else {
                                         setState(() {

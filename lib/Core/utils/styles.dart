@@ -81,7 +81,7 @@ abstract class StylesData {
       fontWeight: FontWeight.w700,
     ),
   );
-  static TextStyle font18 = GoogleFonts.raleway(
+  static TextStyle font18 = GoogleFonts.poppins(
     textStyle: const TextStyle(
       color: Colors.black,
       fontSize: 18,

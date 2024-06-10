@@ -4,7 +4,9 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 class ProductImageScreen extends StatefulWidget {
   final List<String>? imageList;
-  const ProductImageScreen({super.key, required this.imageList});
+  const ProductImageScreen(
+      {super.key, required this.imageList, required this.index});
+  final int index;
 
   @override
   ProductImageScreenState createState() => ProductImageScreenState();
@@ -17,7 +19,7 @@ class ProductImageScreenState extends State<ProductImageScreen> {
   @override
   void initState() {
     super.initState();
-    pageIndex = 0;
+    pageIndex = widget.index;
     _pageController = PageController(initialPage: pageIndex ?? 0);
   }
 

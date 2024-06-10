@@ -1,4 +1,6 @@
 // import 'package:country_picker/country_picker.dart';
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -17,6 +19,30 @@ import 'package:location/location.dart';
 import 'package:shawati/generated/l10n.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:rating_dialog/rating_dialog.dart';
+
+void navigateWithAnimation(BuildContext context, Widget page) {
+  Navigator.push(
+    context,
+    PageRouteBuilder(
+      transitionDuration:
+          const Duration(milliseconds: 500), // Set your desired duration
+      transitionsBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return page;
+      },
+    ),
+  );
+}
 
 Widget defaultButton({
   required VoidCallback fun,
@@ -344,35 +370,35 @@ AppBar customAppBarInNotification(context) {
         onTap: () {},
         child: Padding(
             padding: EdgeInsets.only(
-                right: LocalizationCubit.get(context).isArabic() ? 0.0 : 8.0,
-                left: LocalizationCubit.get(context).isArabic() ? 8.0 : 0.0),
-            child: Row(
+                right: LocalizationCubit.get(context).isArabic() ? 0.0 : 10.0,
+                left: LocalizationCubit.get(context).isArabic() ? 10.0 : 0.0),
+            child: const Row(
               children: [
-                const Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 10,
-                      backgroundColor: Colors.black,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 9,
-                      child: Center(
-                          child: Icon(
-                        Icons.check,
-                        size: 10,
-                      )),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  S.of(context).MakeAllRead,
-                  style: StylesData.font12,
-                )
+                // const Stack(
+                //   alignment: Alignment.center,
+                //   children: [
+                //     CircleAvatar(
+                //       radius: 10,
+                //       backgroundColor: Colors.black,
+                //     ),
+                //     CircleAvatar(
+                //       backgroundColor: Colors.white,
+                //       radius: 9,
+                //       child: Center(
+                //           child: Icon(
+                //         Icons.check,
+                //         size: 10,
+                //       )),
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(
+                //   width: 6,
+                // ),
+                // Text(
+                //   S.of(context).MakeAllRead,
+                //   style: StylesData.font12,
+                // )
               ],
             )),
       ),
@@ -386,6 +412,14 @@ openDialPad(String phoneNumber) async {
     await launchUrl(url);
   } else {
     print("Can't open dial pad.");
+  }
+}
+
+launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
 
@@ -465,7 +499,7 @@ showToast({required String msq, Color color = Colors.black}) =>
         fontSize: 18.0);
 
 Widget CachedImage(String url, {double? height, double? width}) => ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(5),
       child: CachedNetworkImage(
         imageUrl: url,
         height: height,
@@ -512,14 +546,14 @@ Future<LocationData> getloction() async {
   // long = locationdata.longitude;
 }
 
-Future<void> textNumber({required String number}) async {
+Future<void> textNumber({required int phone}) async {
   // Android
-  var uri = 'sms:$number?body=hello%20there';
+  var uri = 'https://wa.me/$phone?text=Hello';
   if (await canLaunch(uri)) {
     await launch(uri);
   } else {
     // iOS
-    uri = 'sms:$number?body=hello%20there';
+    uri = 'sms:$phone?body=hello%20there';
     if (await canLaunch(uri)) {
       await launch(uri);
     } else {
@@ -543,7 +577,10 @@ void showRatingDialog({required BuildContext context, required int id}) {
     child: BlocConsumer<AddRatingCubit, AddRatingState>(
       listener: (context, state) {
         if (state is AddRatingSucc) {
-          showToast(msq: state.msq);
+          showToast(
+              msq: LocalizationCubit.get(context).isArabic()
+                  ? S.of(context).Successfull
+                  : state.msq);
           Navigator.pop(context);
         }
       },
@@ -603,4 +640,44 @@ void showRatingDialog({required BuildContext context, required int id}) {
       return dialog;
     },
   );
+}
+
+launchWhatsApp({required String phone}) async {
+  // Replace '+123456789' with the recipient's phone number
+  // and 'Hello!' with your message.
+  var url = "https://wa.me/$phone?text=Hello!";
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+sendEmail({required String emailAdd}) async {
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((MapEntry<String, String> e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
+  }
+
+// ···
+  final Uri emailLaunchUri = Uri(
+    scheme: 'mailto',
+    path: emailAdd,
+    query: encodeQueryParameters(<String, String>{
+      'subject': 'Example Subject & Symbols are allowed!',
+    }),
+  );
+
+  launchUrl(emailLaunchUri);
+}
+
+launchMapsUrl(double lat, double lng) async {
+  final url = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }

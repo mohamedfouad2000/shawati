@@ -4,21 +4,33 @@ import 'package:shawati/Core/utils/components.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/payment_screen_body.dart';
 
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen(
-      {super.key, required this.id, required this.start, required this.end});
-  final int id;
-  final String start;
-  final String end;
+  const PaymentScreen({
+    super.key,
+    required this.bookingId,
+    required this.serid,
+    required this.startAt,
+    required this.endAt,
+    required this.attachment,
+    required this.coupon,
+  });
+  final int bookingId;
+  final int serid;
+  final String coupon;
+  final String startAt;
+  final String endAt;
+  final String attachment;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context),
-      body: PaymentScreenBody(
-        id: id,
-        start: start,
-        end: end,
-      ),
-    );
+        appBar: customAppBar(context),
+        body: PaymentScreenBody(
+          bookingId: bookingId,
+          coupon: coupon,
+          serid: serid,
+          startAt: startAt,
+          endAt: endAt,
+          attachment: attachment,
+        ));
   }
 }

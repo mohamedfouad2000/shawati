@@ -20,4 +20,15 @@ class NotificationCubit extends Cubit<NotificationState> {
       },
     );
   }
+
+  Future<void> getNotificationsCount() async {
+    emit(GetNotificationCountLoading());
+    final result = await repo.getNotificationsCount();
+    result.fold(
+      (l) => emit(GetNotificationCountError(msg: l.msq.toString())),
+      (r) {
+        emit(GetNotificationCountSucc(count: r));
+      },
+    );
+  }
 }

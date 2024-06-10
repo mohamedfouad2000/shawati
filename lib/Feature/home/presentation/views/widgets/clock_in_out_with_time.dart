@@ -34,28 +34,30 @@ class _ClockInOutWithTimeState extends State<ClockInOutWithTime> {
           .replaceAll('"', '')
           .replaceAll(']', '')
           .replaceAll('\\', '')
-          .trim();
-      end = widget.clockin
+          .trim()
+          .substring(0, 10);
+      end = widget.clockout
           .split(',')
           .last
           .replaceAll('[', '')
           .replaceAll('"', '')
           .replaceAll(']', '')
           .replaceAll('\\', '')
-          .trim();
+          .trim()
+          .substring(0, 10);
     } catch (e) {
-      start = widget.clockin
-          .replaceAll('[', '')
-          .replaceAll('"', '')
-          .replaceAll(']', '')
-          .replaceAll('\\', '')
-          .trim();
-      end = widget.clockin
-          .replaceAll('[', '')
-          .replaceAll('"', '')
-          .replaceAll(']', '')
-          .replaceAll('\\', '')
-          .trim();
+      // start = widget.clockin
+      //     .replaceAll('[', '')
+      //     .replaceAll('"', '')
+      //     .replaceAll(']', '')
+      //     .replaceAll('\\', '')
+      //     .trim();
+      // end = widget.clockin
+      //     .replaceAll('[', '')
+      //     .replaceAll('"', '')
+      //     .replaceAll(']', '')
+      //     .replaceAll('\\', '')
+      //     .trim();
     }
   }
 
@@ -89,9 +91,7 @@ class _ClockInOutWithTimeState extends State<ClockInOutWithTime> {
               ),
               Text(
                 widget.clockin.isNotEmpty && widget.clockin != ''
-                    ? (start
-                        // .substring(0, 17)
-                        )
+                    ? (start.substring(0, 10))
                     : '',
                 style: StylesData.font11.copyWith(color: Colors.black),
               )
@@ -123,7 +123,9 @@ class _ClockInOutWithTimeState extends State<ClockInOutWithTime> {
               height: 4,
             ),
             Text(
-              widget.clockout.isNotEmpty && widget.clockout != '' ? end : '',
+              widget.clockout.isNotEmpty && widget.clockout != ''
+                  ? end.substring(0, 10)
+                  : '',
               style: StylesData.font11.copyWith(color: Colors.black),
             )
           ],

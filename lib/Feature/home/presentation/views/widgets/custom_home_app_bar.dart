@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shawati/Core/constans/const.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
@@ -11,6 +12,8 @@ import 'package:shawati/Core/widgets/loading/clock_in_out_loading.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Home%20Cubit/home_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Home%20Cubit/home_state.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/Notification/notification_cubit.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/profile%20cubit/profile_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/profile%20cubit/profile_state.dart';
 import 'package:shawati/Feature/home/presentation/views/screens/notification_screen.dart';
@@ -34,7 +37,11 @@ class CustomHomeAppBar extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () {
-                  NavegatorPush(context, const EnableLocation());
+                  NavegatorPush(
+                      context,
+                      const EnableLocation(
+                        fromLogin: false,
+                      ));
                 },
                 child: Container(
                   height: 50,
@@ -67,34 +74,62 @@ class CustomHomeAppBar extends StatelessWidget {
                       style: StylesData.font24Google,
                     ),
                     Text(
-                      "${state.model.data?.phone}",
+                      LocalizationCubit.get(context).isArabic()
+                          ? ProfileCubit.get(context).placeAr ?? ''
+                          : ProfileCubit.get(context).place ?? '',
                       style: StylesData.font9,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
-              // const Spacer(),
-              InkWell(
-                onTap: () {
-                  NavegatorPush(context, const NotificationScreen());
-                },
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey, width: .7),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(13),
-                      )),
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Image(
-                      image: AssetImage(AssetsData.notification),
-                      height: 15,
-                      width: 15,
-                    ),
-                  ),
+              const SizedBox(
+                width: 5,
+              ),
+              BlocProvider(
+                create: (context) =>
+                    NotificationCubit(HomeRepoImpl())..getNotificationsCount(),
+                child: BlocBuilder<NotificationCubit, NotificationState>(
+                  builder: (context, state) {
+                    return InkWell(
+                      onTap: () {
+                        NavegatorPush(context, const NotificationScreen());
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border:
+                                    Border.all(color: Colors.grey, width: .7),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(13),
+                                )),
+                            child: const Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Image(
+                                image: AssetImage(AssetsData.notification),
+                                height: 15,
+                                width: 15,
+                              ),
+                            ),
+                          ),
+                          if (state is GetNotificationCountSucc &&
+                              state.count > 0)
+                            const Padding(
+                              padding: EdgeInsets.all(6.0),
+                              child: CircleAvatar(
+                                radius: 5,
+                                backgroundColor: Colors.red,
+                              ),
+                            )
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(

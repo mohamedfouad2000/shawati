@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/search_state.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/price_duration.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shawati/Core/utils/styles.dart';
 
 import 'package:shawati/Feature/home/presentation/views/widgets/product_list.dart';
+import 'package:shawati/Feature/home/presentation/views/widgets/test.dart';
 import 'package:shawati/generated/l10n.dart';
 
 class SearchScreenBody extends StatefulWidget {
@@ -70,13 +72,14 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
       builder: (context, state) {
         return Padding(
           padding:
-              const EdgeInsets.only(left: 16.0, right: 16, top: 32, bottom: 16),
+              const EdgeInsets.only(left: 16.0, right: 16, top: 16, bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SearchWidget(
                 searchController: searchController,
               ),
+
               const SizedBox(
                 height: 20,
               ),

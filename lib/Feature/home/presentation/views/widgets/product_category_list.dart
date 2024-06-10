@@ -180,7 +180,7 @@ Widget item(context,
                   width: 4,
                 ),
                 Text(
-                  "${S.of(context).SAR} ${model?.price} ",
+                  "${S.of(context).SAR} ${model?.regularPrice} ",
                   style: StylesData.font8.copyWith(
                     color: ConstColor.kMainColor,
                   ),

@@ -5,7 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:shawati/Core/constans/const.dart';
 import 'package:shawati/Core/errors/failures.dart';
 import 'package:shawati/Core/remote/dio_helper.dart';
+import 'package:shawati/Feature/home/data/model/admin_model/admin_model.dart';
 import 'package:shawati/Feature/home/data/model/booking_model/booking_model.dart';
+import 'package:shawati/Feature/home/data/model/booking_model/rental.dart';
+import 'package:shawati/Feature/home/data/model/booking_with_id_model/booking_with_id_model.dart';
 import 'package:shawati/Feature/home/data/model/fav_model/fav_model.dart';
 import 'package:shawati/Feature/home/data/model/home_model/category.dart';
 import 'package:shawati/Feature/home/data/model/home_model/home_model.dart';
@@ -14,6 +17,8 @@ import 'package:shawati/Feature/home/data/model/notification_model/notification_
 import 'package:shawati/Feature/home/data/model/payment_model/payment_model.dart';
 import 'package:shawati/Feature/home/data/model/profile_model/profile_model.dart';
 import 'package:shawati/Feature/home/data/model/search_model/search_model.dart';
+import 'package:shawati/Feature/home/data/model/serves_price_details_model/serves_price_details_model.dart';
+import 'package:shawati/Feature/home/data/model/terms_and_privacy_model/terms_and_privacy_model.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo {
@@ -200,23 +205,20 @@ class HomeRepoImpl extends HomeRepo {
   Future<Either<Failure, String>> addBooking(
       {required int id,
       required String start,
-      required String paymentMethod,
-      required File image,
+      required String coupon,
+
+      // required String paymentMethod,
+      // required File image,
       required String end}) async {
     try {
-      print(
-          'aha is  id is $id $start ${image.path.split('/').last} $end $paymentMethod');
-      Response<dynamic> res = await DioHelper.postData(
-        url: xADDBOOKINGURL,
-        data: FormData.fromMap({
-          'service_id': id,
-          'start_at': start,
-          'end_at': end,
-          'payment_method_id': paymentMethod,
-          'attachment': await MultipartFile.fromFile(image.path,
-              filename: image.path.split('/').last),
-        }),
-      );
+      print('aha is  id is $id $start  $end ');
+      Response<dynamic> res =
+          await DioHelper.postData(url: xADDBOOKINGURL, data: [], query: {
+        'service_id': id,
+        'start_at': start,
+        'end_at': end,
+        if (coupon != '') 'coupon_code': coupon
+      });
       print(res.data);
       if (res.data["status"] == 201) {
         print('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
@@ -263,7 +265,7 @@ class HomeRepoImpl extends HomeRepo {
     FavModel? model = FavModel();
 
     try {
-      Response<dynamic> res = await DioHelper.getData(url: xNOTIFICATIONURL);
+      Response<dynamic> res = await DioHelper.getData(url: xFavoritesUrl);
       print(res.data);
 
       if (res.data['status'] == 201) {
@@ -443,6 +445,234 @@ class HomeRepoImpl extends HomeRepo {
       }
     } catch (e) {
       print(e);
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ServesPriceDetailsModel>> getPricesDetails(
+      {required int serid,
+      required String startAt,
+      required String coupon,
+      required int bookingId,
+      required String endAt}) async {
+    ServesPriceDetailsModel model;
+    try {
+      Response<dynamic> res =
+          await DioHelper.getData(url: xGetPricesDetails, data: {}, query: {
+        'service_id': serid,
+        'start_at': startAt,
+        'end_at': endAt,
+        if (bookingId != -1) 'booking_id': bookingId,
+        if (coupon != '') 'coupon_code': coupon
+      });
+      print("aha");
+      print(res.data);
+      if (res.data["status"] == 201) {
+        model = ServesPriceDetailsModel.fromJson(res.data);
+        return right(model);
+      } else if (res.data["status"] == 200) {
+        model = ServesPriceDetailsModel.fromJson(res.data);
+        return right(model);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print(e);
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> deleteAccount() async {
+    try {
+      Response<dynamic> res =
+          await DioHelper.postData(url: xDeleteAccount, data: {}, query: {});
+      print(res.data);
+      if (res.data["status"] == 201) {
+        print('');
+        return right(res.data["msg"]);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print(e);
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> paymentMethod({
+    required int bookingId,
+    required int paymentMethodId,
+    required File image,
+  }) async {
+    try {
+      print('////////////');
+      print(bookingId);
+      print(paymentMethodId);
+
+      Response<dynamic> res = await DioHelper.postData(
+          url: 'upload-booking-attachment',
+          data: FormData.fromMap(
+            {
+              'booking_id': bookingId,
+              'payment_method_id': paymentMethodId,
+              'attachment': await MultipartFile.fromFile(image.path,
+                  filename: image.path.split('/').last),
+            },
+          ),
+          query: {});
+      print(res.data);
+      if (res.data["status"] == 201) {
+        return right(res.data["msg"]);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print(e);
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BookingWithIdModel>> getBookingDeatilsWithId(
+      {required int id}) async {
+    BookingWithIdModel model;
+    try {
+      Response<dynamic> res = await DioHelper.getData(
+          url: 'booking/details', data: {}, query: {'booking_id': id});
+      print("aha");
+      print(res.data);
+      if (res.data["status"] == 201) {
+        model = BookingWithIdModel.fromJson(res.data);
+        return right(model);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print(e);
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AdminModel>> addSupportDataMobileAndEmail() async {
+    AdminModel model;
+    try {
+      Response<dynamic> res =
+          await DioHelper.getData(url: 'settings', data: {}, query: {});
+      print(res.data);
+      if (res.data["status"] == 201) {
+        model = AdminModel.fromJson(res.data);
+        return right(model);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print("error is $e");
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> changeLang({required String lang}) async {
+    try {
+      //  /https://shawate2.com/api/change-user-language
+      Response<dynamic> res = await DioHelper.postData(
+          url: 'change-user-language', data: {}, query: {'lang': lang});
+      print(res.data);
+      if (res.data["status"] == 201) {
+        return right(res.data["msg"]);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print(e);
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> getBookingCount() async {
+    // TODO: implement getBookingCount
+
+//
+    try {
+      Response<dynamic> res =
+          await DioHelper.getData(url: xNotificationCount, data: {}, query: {});
+      print(res.data);
+      if (res.data["status"] == 201) {
+        return right(res.data['data']);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print("error is $e");
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> getNotificationsCount() async {
+    try {
+      Response<dynamic> res = await DioHelper.getData(
+          url: 'notifications-count', data: {}, query: {});
+      print(res.data);
+      if (res.data["status"] == 201) {
+        return right(res.data['data']);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print("error is $e");
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(msq: e.toString()));
+    }
+    //
+  }
+
+  @override
+  Future<Either<Failure, TermsAndPrivacyModel>> getTermsAndPrivacy() async {
+    TermsAndPrivacyModel model;
+    try {
+      Response<dynamic> res =
+          await DioHelper.getData(url: 'terms-policy', data: {}, query: {});
+      print(res.data);
+      if (res.data["status"] == 201) {
+        model = TermsAndPrivacyModel.fromJson(res.data);
+        return right(model);
+      } else {
+        return left(ServerFailure(msq: res.data['msg'].toString()));
+      }
+    } catch (e) {
+      print("error is $e");
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       }

@@ -11,7 +11,9 @@ class RegisterRepoImpl extends RegisterRepo {
   Future<Either<Failure, RegisterModel>> registerUser(
       {required String name,
       required String phone,
+      required String lang,
       required String password,
+      required String fcmToken,
       required String confirmPassword}) async {
     RegisterModel? model;
     try {
@@ -21,17 +23,17 @@ class RegisterRepoImpl extends RegisterRepo {
         'phone': phone,
         'password': password,
         'password_confirmation': confirmPassword,
+        'fcm_token': fcmToken,
+        'lang': lang,
         'role': 1
       });
       print(res.data);
-      if (res.data['status'] == 201) {
-        model = RegisterModel.fromJson(res.data);
-        return right(model);
-      } else {
-        return left(ServerFailure(msq: res.data['msg'].toString()));
-      }
+
+      model = RegisterModel.fromJson(res.data);
+      return right(model);
     } catch (e) {
       if (e is DioException) {
+        print('Error fetching data: $e');
         return left(ServerFailure.fromDioError(e));
       }
 

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MapFlutter extends StatefulWidget {
   const MapFlutter({super.key, required this.latLng});
@@ -34,7 +33,6 @@ class _MapFlutterState extends State<MapFlutter> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return FlutterMap(
       mapController: MapController(),
@@ -49,16 +47,16 @@ class _MapFlutterState extends State<MapFlutter> {
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'dev.fleaflet.flutter_map.example',
         ),
-        RichAttributionWidget(
-          attributions: [
-            TextSourceAttribution(
-              'OpenStreetMap contributors',
-              onTap: () => launchUrl(
-                Uri.parse('https://openstreetmap.org/copyright'),
-              ),
-            ),
-          ],
-        ),
+        // RichAttributionWidget(
+        //   attributions: [
+        //     TextSourceAttribution(
+        //       'OpenStreetMap contributors',
+        //       onTap: () => launchUrl(
+        //         Uri.parse('https://openstreetmap.org/copyright'),
+        //       ),
+        //     ),
+        //   ],
+        // ),
         MarkerLayer(markers: markers)
       ],
     );

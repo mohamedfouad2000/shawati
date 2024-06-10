@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/components.dart';
@@ -10,15 +11,53 @@ import 'package:shawati/Feature/home/presentation/views/manager/Search%20Cubit/s
 import 'package:shawati/Feature/home/presentation/views/screens/filter_screen.dart';
 
 import 'package:shawati/Feature/home/presentation/views/widgets/price_duration.dart';
+import 'package:shawati/Feature/home/presentation/views/widgets/test.dart';
 import 'package:shawati/generated/l10n.dart';
 
-class SearchWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
   const SearchWidget({
     super.key,
     required this.searchController,
   });
 
   final TextEditingController searchController;
+
+  @override
+  State<SearchWidget> createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  Future<String> _showSearch() async {
+    final searchText = await showSearch<String>(
+      context: context,
+      delegate: SearchWithSuggestionDelegate(
+        onSearchChanged: _getRecentSearchesLike,
+      ),
+    );
+
+    //Save the searchText to SharedPref so that next time you can use them as recent searches.
+    await _saveToRecentSearches(searchText!);
+    return searchText ?? '';
+    //Do something with searchText. Note: This is not a result.
+  }
+
+  Future<List<String>> _getRecentSearchesLike(String query) async {
+    final pref = await SharedPreferences.getInstance();
+    final allSearches = pref.getStringList("recentSearches");
+    return allSearches!.where((search) => search.startsWith(query)).toList();
+  }
+
+  Future<void> _saveToRecentSearches(String searchText) async {
+    final pref = await SharedPreferences.getInstance();
+
+    //Use `Set` to avoid duplication of recentSearches
+    Set<String> allSearches =
+        pref.getStringList("recentSearches")?.toSet() ?? {};
+
+    //Place it at first in the set
+    allSearches = {searchText, ...allSearches};
+    pref.setStringList("recentSearches", allSearches.toList());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +70,48 @@ class SearchWidget extends StatelessWidget {
           children: [
             Expanded(
               child: customTextFiled(
-                  controller: searchController,
+                  controller: widget.searchController,
+                  ontapFun: () {
+                    _showSearch().then((value) {
+                      widget.searchController.text = value;
+                      SearchCubit.get(context).text =
+                          widget.searchController.text;
+                      SearchCubit.get(context).searchData(
+                          context: context,
+                          lat: SearchCubit.get(context).lat ?? 0.0,
+                          long: SearchCubit.get(context).long ?? 0.0,
+                          text: widget.searchController.text,
+                          categoryId: SearchCubit.get(context).categoryId != -1 &&
+                                  SearchCubit.get(context).categoryId != null
+                              ? SearchCubit.get(context).categoryId.toString() ??
+                                  ''
+                              : '',
+                          minPrice: SearchCubit.get(context).minPrice != -1 &&
+                                  SearchCubit.get(context).minPrice != null
+                              ? SearchCubit.get(context).minPrice.toString() ??
+                                  ''
+                              : '',
+                          maxPrice: SearchCubit.get(context).maxPrice != -1 &&
+                                  SearchCubit.get(context).maxPrice != null
+                              ? SearchCubit.get(context).maxPrice.toString() ??
+                                  ''
+                              : '',
+                          bed: SearchCubit.get(context).bed != -1 &&
+                                  SearchCubit.get(context).bed != null
+                              ? (SearchCubit.get(context).bed! + 1).toString() ??
+                                  ''
+                              : '',
+                          floor: SearchCubit.get(context).floor != -1 && SearchCubit.get(context).floor != null ? (SearchCubit.get(context).floor! + 1).toString() ?? '' : '',
+                          bath: SearchCubit.get(context).bath != -1 && SearchCubit.get(context).bath != null ? (SearchCubit.get(context).bath! + 1).toString() ?? '' : '',
+                          priceDuration: SearchCubit.get(context).priceDuration != -1 && SearchCubit.get(context).priceDuration != null ? titles[SearchCubit.get(context).priceDuration!] ?? '' : '',
+                          maxarea: SearchCubit.get(context).maxarea != -1 && SearchCubit.get(context).maxarea != null ? SearchCubit.get(context).maxarea.toString() ?? '' : '',
+                          minarea: SearchCubit.get(context).minarea != -1 && SearchCubit.get(context).minarea != null ? SearchCubit.get(context).minarea.toString() ?? '' : '');
+                    });
+                  },
                   onChanged: (i) {
                     SearchCubit.get(context).text = i;
                     SearchCubit.get(context).searchData(
-                      context: context,
+                        context: context,
                         lat: SearchCubit.get(context).lat ?? 0.0,
                         long: SearchCubit.get(context).long ?? 0.0,
                         text: i,
@@ -70,7 +146,7 @@ class SearchWidget extends StatelessWidget {
                     padding: EdgeInsets.all(12.0),
                     child: ImageIcon(
                       AssetImage(
-                        AssetsData.searchicon,
+                        AssetsData.searchiconBar,
                       ),
                       size: 6,
                       color: Colors.grey,

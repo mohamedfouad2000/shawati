@@ -37,8 +37,23 @@ class PersonWidget extends StatelessWidget {
                   Container(
                     height: 60,
                     width: 60,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white,
+                      // borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                      // color: Colors.black,
+                      boxShadow: [
+                        BoxShadow(
+                            offset: const Offset(1, 1),
+                            blurRadius: 2,
+                            spreadRadius: 1,
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withOpacity(.125))
+                      ],
                     ),
                     child: CachedImage('$xURLIMAGE${state.model.data?.image}'),
                   ),

@@ -1,3 +1,4 @@
+import 'package:custom_calendar_viewer/custom_calendar_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shawati/Core/constans/const.dart';
@@ -10,6 +11,7 @@ import 'package:shawati/Feature/home/presentation/views/widgets/category_widget.
 import 'package:shawati/Feature/home/presentation/views/widgets/custom_home_app_bar.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/home_search_widget.dart';
 import 'package:shawati/Feature/home/presentation/views/widgets/product_iteam_widget.dart';
+import 'package:shawati/test.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({super.key});
@@ -49,12 +51,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             },
             child: Padding(
               padding: const EdgeInsets.only(
-                  left: 16.0, right: 16, top: 32, bottom: 16),
+                  left: 16.0, right: 16, top: 16, bottom: 16),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const CustomHomeAppBar(),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    // const testMan(),
                     const SizedBox(
                       height: 10,
                     ),

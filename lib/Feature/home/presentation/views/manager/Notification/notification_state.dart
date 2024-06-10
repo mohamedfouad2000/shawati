@@ -16,3 +16,15 @@ final class NotificationError extends NotificationState {
   final String msg;
   NotificationError({required this.msg});
 }
+
+final class GetNotificationCountLoading extends NotificationState {}
+
+final class GetNotificationCountSucc extends NotificationState {
+  final int count;
+  GetNotificationCountSucc({required this.count});
+}
+
+final class GetNotificationCountError extends NotificationState {
+  final String msg;
+  GetNotificationCountError({required this.msg});
+}

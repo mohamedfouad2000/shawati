@@ -28,13 +28,14 @@ class SeeAllScreenBody extends StatelessWidget {
                         owner: contactDetails ?? ContactDetails()));
               },
               child: ProductData(
+                  gallary: services[index].gallery ?? [],
                   id: services[index].id ?? 0,
                   title: services[index].name ?? '',
                   subTitle: services[index].place ?? '',
                   image: services[index].image ?? '',
-                  subTitlearab: services[index].place ?? '',
+                  subTitlearab: services[index].placeAr ?? '',
                   titlearab: services[index].nameAr ?? '',
-                  money: services[index].price.toString() ?? ''),
+                  money: services[index].regularPrice.toString() ?? ''),
             );
           },
           separatorBuilder: (BuildContext context, int index) {

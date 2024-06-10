@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:shawati/Core/blocobserve.dart';
 import 'package:shawati/Core/local/cache_Helper.dart';
 import 'package:shawati/Core/remote/dio_helper.dart';
@@ -13,12 +18,60 @@ import 'package:shawati/Feature/home/presentation/views/manager/local/localicati
 import 'package:shawati/Feature/home/presentation/views/manager/local/localication_state.dart';
 import 'package:shawati/Feature/splash/presentation/views/splach_view.dart';
 import 'package:shawati/generated/l10n.dart';
+import 'package:shawati/notification/local_notifications/notifications_serves.dart';
+import 'package:shawati/notification/push_notification.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   await DioHelper.init();
   await CacheHelper.init();
+  // await LocalNotificationService.init();
+  Platform.isAndroid
+      ? await Firebase.initializeApp(
+          options: const FirebaseOptions(
+              apiKey: 'AIzaSyCrO9xWB-shiRnGXxGtCKHLk9MvosgBC00',
+              appId: '1:842250419854:android:760d08d96db93ef53a53df',
+              messagingSenderId: '842250419854',
+              projectId: 'shawate-users'),
+        )
+      : await Firebase.initializeApp();
+
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.instance
+      .requestPermission()
+      .then((NotificationSettings settings) {
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else {
+      print('User declined permission');
+    }
+  });
+
+// Listen for incoming FCM messages
+  firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
+  firebaseMessaging.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.onMessage.listen((event) {
+    NotificationSound.onMessage(event);
+    print('onMessage');
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    NotificationSound.onMessageOpenedApp(event);
+    print('onMessageOpenedApp');
+  });
+  FirebaseMessaging.onBackgroundMessage(
+      NotificationSound.firebaseMessagingBackgroundHandler);
+  String? token = await FirebaseMessaging.instance.getToken();
+  print("Token is // $token");
 
   runApp(const MyApp());
 }
@@ -53,7 +106,7 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) {
-            return LocalizationCubit()
+            return LocalizationCubit(HomeRepoImpl())
               ..l = isarbic ? const Locale('ar') : const Locale('en');
           },
         ),
@@ -61,8 +114,9 @@ class _MyAppState extends State<MyApp> {
       child: BlocConsumer<LocalizationCubit, LocalizationState>(
         listener: (context, state) {},
         builder: (context, state) {
-          return MaterialApp(
+          return GetMaterialApp(
             locale: LocalizationCubit.get(context).l,
+            navigatorKey: navigatorKey,
             localizationsDelegates: const [
               S.delegate,
               GlobalMaterialLocalizations.delegate,
@@ -75,6 +129,7 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
                 colorScheme:
                     ColorScheme.fromSeed(seedColor: ConstColor.kMainColor),
+                primaryColor: Colors.white,
                 useMaterial3: true,
                 scaffoldBackgroundColor: Colors.white,
                 appBarTheme: const AppBarTheme(

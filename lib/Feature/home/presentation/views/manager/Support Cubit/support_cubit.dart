@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:shawati/Feature/home/data/model/admin_model/admin_model.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo.dart';
 
 part 'support_state.dart';
@@ -14,6 +15,15 @@ class SupportCubit extends Cubit<SupportState> {
     result.fold(
       (l) => emit(SupportError(msg: l.msq.toString())),
       (r) => emit(SupportSucc(msq: r)),
+    );
+  }
+
+  Future<void> getEmailAndPhone() async {
+    emit(GetSettingLoading());
+    final result = await repo.addSupportDataMobileAndEmail();
+    result.fold(
+      (l) => emit(GetSettingError(msg: l.msq.toString())),
+      (r) => emit(GetSettingSucc(msq: r)),
     );
   }
 }

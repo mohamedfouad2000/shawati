@@ -26,7 +26,7 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
           child: BlocConsumer<LocationCubit, LocationState>(
             listener: (context, state) {
               if (state is LocationSucc) {
-                NavegatorPush(context, const HomeView(currentidex: 0));
+                Nav(context, const HomeView(currentidex: 0));
               }
             },
             builder: (context, state) {

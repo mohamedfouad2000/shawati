@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:shawati/Core/constans/const.dart';
+import 'package:shawati/Core/local/cache_Helper.dart';
 import 'package:shawati/Core/utils/assets_data.dart';
 import 'package:shawati/Core/utils/colors.dart';
 import 'package:shawati/Core/utils/components.dart';
@@ -12,8 +13,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shawati/Core/utils/styles.dart';
 import 'package:shawati/Feature/home/data/repo/home_repo_imp.dart';
 import 'package:shawati/Feature/home/presentation/views/home_view.dart';
+import 'package:shawati/Feature/home/presentation/views/manager/local/localication_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/profile%20cubit/profile_cubit.dart';
 import 'package:shawati/Feature/home/presentation/views/manager/profile%20cubit/profile_state.dart';
+import 'package:shawati/Feature/login/presentation/views/login_view.dart';
 import 'package:shawati/generated/l10n.dart';
 
 class EditUserForm extends StatefulWidget {
@@ -57,9 +60,28 @@ class _EditUserFormState extends State<EditUserForm> {
       child: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is UpdateProfileError) {
-            showToast(msq: state.msg.toString());
+            showToast(
+                msq: LocalizationCubit.get(context).isArabic()
+                    ? S.of(context).oppsMessage
+                    : state.msg.toString());
+            ProfileCubit.get(context).getProfileData();
           } else if (state is UpdateProfileSucc) {
             Nav(context, const HomeView(currentidex: 0));
+          } else if (state is DeleteAccountSucc) {
+            showToast(
+                msq: LocalizationCubit.get(context).isArabic()
+                    ? S.of(context).Successfull
+                    : state.msq.toString());
+            CacheHelper.removeData(key: 'Token');
+            TOKEN = '';
+            Nav(context, const LoginView());
+          } else if (state is DeleteAccountError) {
+            showToast(
+                msq: LocalizationCubit.get(context).isArabic()
+                    ? S.of(context).oppsMessage
+                    : state.msg.toString());
+
+            ProfileCubit.get(context).getProfileData();
           }
         },
         builder: (context, state) {
@@ -362,45 +384,52 @@ class _EditUserFormState extends State<EditUserForm> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: Center(
-                        child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: S.of(context).profile1,
-                              style: StylesData.font11.copyWith(
-                                color: Colors.grey,
-                              )),
-                          TextSpan(
-                              text: S.of(context).profile2,
-                              style: StylesData.font11.copyWith(
-                                decoration: TextDecoration.underline,
-                              )),
-                          TextSpan(
-                              text: S.of(context).profile3,
-                              style: StylesData.font11.copyWith(
-                                color: Colors.grey,
-                              )),
-                          TextSpan(
-                              text: S.of(context).profile4,
-                              style: StylesData.font11.copyWith(
-                                decoration: TextDecoration.underline,
-                              )),
-                          TextSpan(
-                              text: S.of(context).profile5,
-                              style: StylesData.font11.copyWith(
-                                color: Colors.grey,
-                              )),
-                        ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        S.of(context).profile4,
+                        style: StylesData.font11.copyWith(
+                          color: Colors.grey,
+                        ),
                       ),
-                    )),
+                      InkWell(
+                        onTap: () {
+                          ProfileCubit.get(context).deleteAccount();
+                        },
+                        child: Text(S.of(context).profile5,
+                            style: StylesData.font11.copyWith(
+                              decoration: TextDecoration.underline,
+                            )),
+                      ),
+                    ],
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 18),
+                  //   child: Center(
+                  //       child: RichText(
+                  //     textAlign: TextAlign.center,
+                  //     text: TextSpan(
+                  //       children: <TextSpan>[
+                  //         TextSpan(
+                  //             text: S.of(context).profile4,
+                  //             style: StylesData.font11.copyWith(
+                  //               color: Colors.grey,
+                  //             )),
+                  //         TextSpan(
+                  //             text: S.of(context).profile5,
+                  //             style: StylesData.font11.copyWith(
+                  //               decoration: TextDecoration.underline,
+                  //             )),
+                  //       ],
+                  //     ),
+                  //   )),
+                  // ),
+
                   const SizedBox(
                     height: 20,
                   ),
+
                   if (eroorMsq != '')
                     Container(
                       width: double.infinity,

@@ -27,3 +27,15 @@ final class UpdateProfileError extends ProfileState {
   final String msg;
   UpdateProfileError({required this.msg});
 }
+
+final class DeleteAccountLoading extends ProfileState {}
+
+final class DeleteAccountSucc extends ProfileState {
+  final String msq;
+  DeleteAccountSucc({required this.msq});
+}
+
+final class DeleteAccountError extends ProfileState {
+  final String msg;
+  DeleteAccountError({required this.msg});
+}
